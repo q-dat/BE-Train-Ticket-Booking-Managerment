@@ -11,7 +11,7 @@ const generateToken = async (userId: string): Promise<string> => {
     // Tìm user theo userId
     const user = await User.findById(userId).exec();
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("Không tìm thấy người dùng");
     }
 
     // console.log('User found:', user);
@@ -27,8 +27,8 @@ const generateToken = async (userId: string): Promise<string> => {
 
     return token;
   } catch (error) {
-    console.error('Error generating token:', error);
-    throw new Error('Error generating token');
+    console.error('Lỗi khi tạo token:', error);
+    throw new Error('Lỗi khi tạo token');
   }
 };
 

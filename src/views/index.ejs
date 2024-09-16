@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Endpoints</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .create {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .read {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+
+    .update {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .delete {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="container mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+    <h1 class="text-4xl font-extrabold text-indigo-600 mb-6">API Endpoints</h1>
+    <p class="text-lg mb-4 text-gray-700">Base URL:
+      <a href="http://localhost:6001/" class="text-indigo-600 hover:underline font-medium">http://localhost:6001/</a>
+    </p>
+
+    <% Object.keys(endpointsByCategory).forEach(category=> { %>
+      <section class="mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+          <%= category %>
+        </h2>
+        <ul class="list-disc pl-5 space-y-4">
+          <% endpointsByCategory[category].forEach(endpoint=> { %>
+            <li class="p-3 rounded-md shadow-sm hover:bg-opacity-80
+              <% if (endpoint.type === 'create') { %> create <% } %>
+              <% if (endpoint.type === 'read') { %> read <% } %>
+              <% if (endpoint.type === 'update') { %> update <% } %>
+              <% if (endpoint.type === 'delete') { %> delete <% } %>">
+              <strong class="font-semibold text-gray-800">
+                <%= endpoint.name %>:
+              </strong>
+              <a href="<%= endpoint.url %>" class="text-blue-600 hover:underline">
+                <%= endpoint.url %>
+              </a>
+            </li>
+            <% }) %>
+        </ul>
+      </section>
+      <% }) %>
+  </div>
+</body>
+
+</html>

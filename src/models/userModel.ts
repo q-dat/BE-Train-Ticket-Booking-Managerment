@@ -1,12 +1,18 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+// Định nghĩa enum cho các giá trị hợp lệ của role
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin'
+}
+
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   username: string;
   email: string;
   password: string;
-  role?: string;
+  role?: UserRole;  // Sử dụng enum cho role
   profileImage?: string;
   bio?: string;
   profession?: string;
@@ -18,7 +24,7 @@ const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, default: 'user' },
+  role: { type: String, enum: Object.values(UserRole), default: UserRole.USER }, // Sử dụng enum trong schema
   profileImage: { type: String },
   bio: { type: String, maxlength: 200 },
   profession: { type: String },
@@ -44,7 +50,7 @@ userSchema.pre('save', async function (next) {
 });
 
 // Phương thức so sánh mật khẩu người dùng nhập vào (mật khẩu chưa được mã hóa) với mật khẩu đã được mã hóa (được lưu trong cơ sở dữ liệu)
-userSchema.methods.comparePassword = function (candidatePassword: string) {
+userSchema.methods.comparePassword = function (candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
