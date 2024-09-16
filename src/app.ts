@@ -5,6 +5,8 @@ import connectDB from './config/db';
 import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';  // Nhập khẩu cookie-parser
+import path from 'path';
+import { endpointsByCategory } from './endpointsByCategory';
 
 dotenv.config();
 connectDB();
@@ -32,9 +34,14 @@ app.use(express.json());
 
 app.use('/api/auth', userRoutes); // Định nghĩa route
 
+// Cấu hình EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // Thay đổi theo thư mục chứa các tệp EJS của bạn
+
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.render('index', { endpointsByCategory });
 });
+
 
 app.use(errorHandler); // Middleware xử lý lỗi
 

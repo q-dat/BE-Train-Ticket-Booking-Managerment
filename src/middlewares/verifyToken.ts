@@ -15,7 +15,7 @@ const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
 
     // Kiểm tra nếu không có token
     if (!token) {
-      return res.status(401).json({ message: "No token provided" });
+      return res.status(401).json({ message: "Không có token được cung cấp" });
     }
 
     // Xác thực token
@@ -23,7 +23,7 @@ const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
 
     // Kiểm tra nếu token không hợp lệ
     if (!decoded) {
-      return res.status(401).json({ message: "Invalid token" });
+      return res.status(401).json({ message: "Token không hợp lệ" });
     }
 
     // Gán thông tin từ token vào request
@@ -35,12 +35,12 @@ const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
   } catch (error) {
     // Xử lý lỗi với thông tin chi tiết
     if (error instanceof jwt.TokenExpiredError) {
-      res.status(401).json({ message: 'Token has expired' });
+      res.status(401).json({ message: 'Token đã hết hạn' });
     } else if (error instanceof jwt.JsonWebTokenError) {
-      res.status(401).json({ message: 'Invalid token' });
+      res.status(401).json({ message: 'Token không hợp lệ' });
     } else {
-      console.error('Unexpected error while verifying token:', error);
-      res.status(500).json({ message: 'Internal server error' });
+      console.error('Lỗi không mong đợi khi xác minh token:', error);
+      res.status(500).json({ message: 'Lỗi máy chủ nội bộ' });
     }
   }
 };

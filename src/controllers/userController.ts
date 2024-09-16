@@ -1,67 +1,64 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
-import generateToken from '../middlewares/generateToken';  // Đường dẫn đến hàm tạo token
+import generateToken from '../middlewares/generateToken';
 import { CustomRequest } from '~/type';
+import mongoose from 'mongoose';
 
 // Đăng ký user
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (req: Request, res: Response): Promise<void> => {
   const { username, email, password } = req.body;
 
   try {
-    // Kiểm tra nếu user đã tồn tại
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      res.status(400).json({ message: 'Người dùng đã tồn tại' });
+      return;
     }
 
-    // Tạo user mới
     const user = await User.create({
       username,
       email,
-      password // Mật khẩu sẽ được hash bởi middleware của schema
+      password
     });
 
     if (user) {
-      res.status(201).json({ message: "User registered successfully!" });
+      res.status(201).json({ message: "Người dùng đã đăng ký thành công!" });
     } else {
-      res.status(400).json({ message: 'Invalid user data' });
+      res.status(400).json({ message: 'Dữ liệu người dùng không hợp lệ' });
     }
   } catch (error) {
-    console.error('Error registering user', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Lỗi khi đăng ký người dùng', error);
+    res.status(500).json({ message: 'Lỗi máy chủ' });
   }
 };
 
 // Đăng nhập user
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
   try {
-    // Tìm user theo email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404).json({ message: "Người dùng không tìm thấy" });
+      return;
     }
 
-    // So sánh mật khẩu
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Password does not match" });
+      res.status(401).json({ message: "Mật khẩu không khớp" });
+      return;
     }
 
-    // Tạo token JWT
     const token = await generateToken(user._id.toString());
 
-    // Gửi token qua cookie
     res.cookie('token', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'none'
     });
 
-    // Trả về thông tin người dùng
     res.status(200).json({
-      message: "Logged in successfully",
+      message: "Đăng nhập thành công",
       token,
       user: {
         _id: user._id,
@@ -72,21 +69,101 @@ export const loginUser = async (req: Request, res: Response) => {
         bio: user.bio,
         profession: user.profession
       }
-    });
+    });  // Sửa: Đổi từ res.send thành res.json
   } catch (error) {
-    console.error("Error logging in user", error);
-    res.status(500).json({ message: "Error logging in user" });
+    console.error("Lỗi khi đăng nhập người dùng", error);
+    res.status(500).json({ message: "Lỗi khi đăng nhập người dùng" });  // Sửa: Đổi từ res.send thành res.json
+  }
+};
+
+// Đăng xuất user
+export const logoutUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+    res.status(200).json({ message: "Đăng xuất thành công!" });
+  } catch (error) {
+    console.error("Không thể đăng xuất", error);
+    res.status(500).json({ message: "Đăng xuất thất bại!" });
+  }
+};
+
+// Hiện tất cả user
+export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users = await User.find({}, 'id email role');
+    res.status(200).json({ message: "Tìm thấy người dùng thành công", users });
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách người dùng", error);
+    res.status(500).json({ message: "Không thể lấy danh sách người dùng" });
+  }
+};
+
+// Xoá user
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
+      return;
+    }
+
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      res.status(404).json({ message: "Người dùng không tìm thấy" });
+      return;
+    }
+
+    res.status(200).json({ message: "Xóa người dùng thành công" });
+  } catch (error) {
+    console.error("Lỗi khi xóa người dùng", error);
+    res.status(500).json({ message: "Lỗi khi xóa người dùng" });
+  }
+};
+
+// cập nhật role user
+export const updateUserRole = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
+      return;
+    }
+
+    if (!role) {
+      res.status(400).json({ message: "Yêu cầu vai trò" });
+      return;
+    }
+
+    const user = await User.findByIdAndUpdate(id, { role }, { new: true });
+
+    if (!user) {
+      res.status(404).json({ message: "Người dùng không tìm thấy" });
+      return;
+    }
+
+    res.status(200).json({ message: "Cập nhật vai trò người dùng thành công", user });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật vai trò người dùng", error);
+    res.status(500).json({ message: "Không thể cập nhật vai trò người dùng" });
   }
 };
 
 // verifyToken
-export const Users = async (req: CustomRequest, res: Response) => {
-  // Sử dụng req.userId và req.role nếu cần
-  res.send({ message: "Protected users", userId: req.userId, role: req.role });
+export const Users = async (req: CustomRequest, res: Response): Promise<void> => {
+  res.json({ message: "Người dùng được bảo vệ" });
 };
 
 // isAdmin
-export const AdminPage = async (req: CustomRequest, res: Response) => {
-  // Sử dụng req.userId và req.role nếu cần
-  res.send({ message: "Welcome, Admin!", userId: req.userId, role: req.role });
+export const AdminPage = async (req: CustomRequest, res: Response): Promise<void> => {
+  res.json({ message: "Welcome, Admin!" });
 };
+
+// 201 cho tạo tài nguyên thành công, 404 cho không tìm thấy tài nguyên, 400 cho yêu cầu không hợp lệ, 500 cho lỗi server
