@@ -4,7 +4,7 @@ import cors from 'cors';
 import connectDB from './config/db';
 import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middlewares/errorMiddleware';
-import cookieParser from 'cookie-parser';  // Nhập khẩu cookie-parser
+import cookieParser from 'cookie-parser';
 import path from 'path';
 import { endpointsByCategory } from './endpointsByCategory';
 
@@ -27,22 +27,21 @@ app.use(cors({
   credentials: true,
 }));
 
-// Cấu hình cookie-parser
-app.use(cookieParser());  // Thêm middleware cookie-parser
+app.use(cookieParser())
 
 app.use(express.json());
 
-app.use('/api/auth', userRoutes); // Định nghĩa route
+app.use('/api/auth', userRoutes);
 
 // Cấu hình EJS
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // Thay đổi theo thư mục chứa các tệp EJS của bạn
+app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
   res.render('index', { endpointsByCategory });
 });
 
 
-app.use(errorHandler); // Middleware xử lý lỗi
+app.use(errorHandler);
 
 export default app;

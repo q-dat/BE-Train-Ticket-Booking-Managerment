@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/userModel';
 import generateToken from '../middlewares/generateToken';
-import { CustomRequest } from '~/type';
 import mongoose from 'mongoose';
 
 // Đăng ký user
@@ -69,10 +68,10 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
         bio: user.bio,
         profession: user.profession
       }
-    });  // Sửa: Đổi từ res.send thành res.json
+    });
   } catch (error) {
     console.error("Lỗi khi đăng nhập người dùng", error);
-    res.status(500).json({ message: "Lỗi khi đăng nhập người dùng" });  // Sửa: Đổi từ res.send thành res.json
+    res.status(500).json({ message: "Lỗi khi đăng nhập người dùng" });
   }
 };
 
@@ -154,16 +153,6 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
     console.error("Lỗi khi cập nhật vai trò người dùng", error);
     res.status(500).json({ message: "Không thể cập nhật vai trò người dùng" });
   }
-};
-
-// verifyToken
-export const Users = async (req: CustomRequest, res: Response): Promise<void> => {
-  res.json({ message: "Người dùng được bảo vệ" });
-};
-
-// isAdmin
-export const AdminPage = async (req: CustomRequest, res: Response): Promise<void> => {
-  res.json({ message: "Welcome, Admin!" });
 };
 
 // 201 cho tạo tài nguyên thành công, 404 cho không tìm thấy tài nguyên, 400 cho yêu cầu không hợp lệ, 500 cho lỗi server

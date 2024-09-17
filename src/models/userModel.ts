@@ -23,7 +23,7 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String, required: true, minlength: 6 },
   role: { type: String, enum: Object.values(UserRole), default: UserRole.USER }, // Sử dụng enum trong schema
   profileImage: { type: String },
   bio: { type: String, maxlength: 200 },

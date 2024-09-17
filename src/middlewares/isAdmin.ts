@@ -1,9 +1,12 @@
 import { Response, NextFunction } from 'express';
-import { CustomRequest } from '../type';
+import { CustomRequest, UserRole } from '../type';
 
 const isAdmin = (req: CustomRequest, res: Response, next: NextFunction): void => {
-  if (req.role !== 'admin') {
-    res.status(403).send({ success: false, message: 'Bạn không được phép thực hiện hành động này. Vui lòng thử đăng nhập dưới vai trò admin' });
+  if (req.role !== UserRole.ADMIN) {
+    res.status(403).json({
+      success: false,
+      message: 'Bạn không được phép thực hiện hành động này. Vui lòng thử đăng nhập dưới vai trò admin'
+    });
     return;
   }
   next();
