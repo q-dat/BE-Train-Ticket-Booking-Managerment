@@ -1,12 +1,12 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { CustomRequest } from '../type';
+import { CustomRequest, UserRole } from '../type';
 
 const JWT_SECRET = process.env.JWT_SECRET_KEY as string;
 
 interface DecodedToken {
   userId: string;
-  role: string;
+  role: UserRole;  // Sử dụng enum UserRole
 }
 
 const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
@@ -20,11 +20,6 @@ const verifyToken = (req: CustomRequest, res: Response, next: NextFunction) => {
 
     // Xác thực token
     const decoded = jwt.verify(token, JWT_SECRET) as DecodedToken;
-
-    // Kiểm tra nếu token không hợp lệ
-    if (!decoded) {
-      return res.status(401).json({ message: "Token không hợp lệ" });
-    }
 
     // Gán thông tin từ token vào request
     req.userId = decoded.userId;
