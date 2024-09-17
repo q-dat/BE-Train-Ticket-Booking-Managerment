@@ -7,24 +7,30 @@
   <title>API Endpoints</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    .create {
-      background-color: #d4edda;
-      color: #155724;
+    .endpoint-button {
+      display: inline-block;
+      background-color: #3be061;
+      color: white;
+      font-weight: bold;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.375rem;
+      margin-right: 5px;
+      text-transform: uppercase;
     }
 
-    .read {
-      background-color: #cce5ff;
-      color: #004085;
+    .endpoint-row {
+      background-color: #f1fdf4;
+      border: 1px solid #28a745;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
     }
 
-    .update {
-      background-color: #fff3cd;
-      color: #856404;
+    .endpoint-row:hover {
+      background-color: #e6f8e8;
     }
 
-    .delete {
-      background-color: #f8d7da;
-      color: #721c24;
+    .endpoint-description {
+      padding-left: 10px;
     }
   </style>
 </head>
@@ -41,19 +47,18 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-4">
           <%= category %>
         </h2>
-        <ul class="list-disc pl-5 space-y-4">
+        <ul class="space-y-4">
           <% endpointsByCategory[category].forEach(endpoint=> { %>
-            <li class="p-3 rounded-md shadow-sm hover:bg-opacity-80
-              <% if (endpoint.type === 'create') { %> create <% } %>
-              <% if (endpoint.type === 'read') { %> read <% } %>
-              <% if (endpoint.type === 'update') { %> update <% } %>
-              <% if (endpoint.type === 'delete') { %> delete <% } %>">
-              <strong class="font-semibold text-gray-800">
-                <%= endpoint.name %>:
-              </strong>
-              <a href="<%= endpoint.url %>" class="text-blue-600 hover:underline">
+            <li class="endpoint-row">
+              <span class="endpoint-button">
+                <%= endpoint.method.toUpperCase() %>
+              </span>
+              <a href="<%= endpoint.url %>" class="font-bold text-xl hover:underline">
                 <%= endpoint.url %>
               </a>
+              <span class="endpoint-description">
+                <%= endpoint.description %>
+              </span>
             </li>
             <% }) %>
         </ul>

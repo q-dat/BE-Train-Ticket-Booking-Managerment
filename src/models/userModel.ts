@@ -1,10 +1,15 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-// Định nghĩa enum cho các giá trị hợp lệ của role
 export enum UserRole {
   USER = 'user',
   ADMIN = 'admin'
+}
+
+export enum UserGender {
+  MALE = 'male',
+  FEMALE = 'female',
+  OTHER = 'other'
 }
 
 export interface IUser extends Document {
@@ -12,7 +17,10 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  role?: UserRole;  // Sử dụng enum cho role
+  phone: string;
+  fullName: string;
+  gender?: string;
+  role?: UserRole;
   profileImage?: string;
   bio?: string;
   profession?: string;
@@ -24,7 +32,10 @@ const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minlength: 6 },
-  role: { type: String, enum: Object.values(UserRole), default: UserRole.USER }, // Sử dụng enum trong schema
+  phone: { type: String, required: true, unique: true },
+  fullName: { type: String, required: true },
+  gender: { type: String, enum: Object.values(UserGender), required: true },
+  role: { type: String, enum: Object.values(UserRole), default: UserRole.USER },
   profileImage: { type: String },
   bio: { type: String, maxlength: 200 },
   profession: { type: String },

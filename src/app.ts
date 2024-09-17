@@ -19,9 +19,9 @@ const allowedOrigins = ['https://user.example.com', 'https://dashboard.example.c
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true); // Cho phép yêu cầu từ origin hợp lệ
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS')); // Từ chối yêu cầu từ origin không hợp lệ
+      callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
