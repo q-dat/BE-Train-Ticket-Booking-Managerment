@@ -6,7 +6,7 @@ import userRoutes from './routes/userRoutes';
 import { errorHandler } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import { endpointsByCategory } from './endpointsByCategory';
+import { endpointsByCategory } from './views/endpointsByCategory';
 
 dotenv.config();
 connectDB();
