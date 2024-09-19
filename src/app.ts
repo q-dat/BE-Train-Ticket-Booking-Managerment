@@ -14,18 +14,23 @@ connectDB();
 const app = express();
 
 // Cấu hình CORS
-const allowedOrigins = ['https://user.example.com', 'https://dashboard.example.com'];
+// const allowedOrigins = ['https://user.example.com', 'https://dashboard.example.com'];
 
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true,
+// }));
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
+  origin: 'http://localhost:5173', // Địa chỉ frontend
+  credentials: true,  // Để cho phép cookie được gửi
 }));
+
 
 app.use(cookieParser())
 
