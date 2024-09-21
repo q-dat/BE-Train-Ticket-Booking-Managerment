@@ -10,18 +10,18 @@ router.post('/register', upload.single('profileImage'), registerUser); // Đăng
 router.post('/login', loginUser); // Đăng nhập
 router.post('/logout', logoutUser); // Đăng xuất
 
-router.delete('/users/:id', verifyToken, isAdmin, deleteUser); // Xóa người dùng
+// router.delete('/users/:id', verifyToken, isAdmin, deleteUser); // Xóa người dùng
 
 // Các route liên quan đến người dùng, cần phân biệt rõ ràng
-router.put('/users/:id/role', updateUserRole); // Cập nhật vai trò người dùng
+router.put('/users/:id/role', verifyToken, isAdmin, updateUserRole); // Cập nhật vai trò người dùng
 router.put('/users/:id/profile', upload.single('profileImage'), verifyToken, updateUserProfile); // Cập nhật hồ sơ người dùng (người dùng có thể tự cập nhật)
 router.put('/users/:id/password', verifyToken, changePassword); // Đổi mật khẩu người dùng (người dùng tự đổi)
 
 // Lấy danh sách tất cả người dùng (admin)
-router.get('/users', getAllUsers);
+router.get('/users', verifyToken, isAdmin, getAllUsers);
 
 // Lấy thông tin một người dùng cụ thể
-router.get('/users/:id', verifyToken, getUserById);
+router.get('/users/:id', verifyToken, isAdmin, getUserById);
 
 
 export default router;
