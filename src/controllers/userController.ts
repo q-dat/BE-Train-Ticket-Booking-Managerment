@@ -1,11 +1,24 @@
 import { Request, Response } from 'express';
-import User from '../models/userModel';
+import User, { IUser } from '../models/userModel';
 import generateToken from '../middlewares/generateToken';
 import mongoose from 'mongoose';
+import multer from 'multer';
+import fs from 'fs';
+import path from 'path';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+export const upload = multer({ storage });
 
 // Đăng ký user
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { username, email, password, phone, fullName, gender, profileImage } = req.body;
+  const { username, email, password, phone, fullName, gender } = req.body;
 
   try {
     const userExists = await User.findOne({
@@ -19,6 +32,8 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       res.status(400).json({ message: 'Người dùng đã tồn tại' });
       return;
     }
+
+    const profileImage = req.file ? req.file.path : undefined;
 
     const user = await User.create({
       username,
@@ -163,7 +178,7 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
 export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { username, email, phone, fullName, gender, profileImage } = req.body;
+    const { username, email, phone, fullName, gender } = req.body;
 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
@@ -184,7 +199,21 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
       return;
     }
 
-    const updates = { username, email, phone, fullName, gender, profileImage };
+    const currentUser = await User.findById(id);
+    if (!currentUser) {
+      res.status(404).json({ message: "Người dùng không tìm thấy" });
+      return;
+    }
+
+    const updates: Partial<IUser> = { username, email, phone, fullName, gender };
+    if (req.file) {
+
+      if (currentUser.profileImage && fs.existsSync(currentUser.profileImage)) {
+        fs.unlinkSync(currentUser.profileImage);
+      }
+      updates.profileImage = req.file.path;
+    }
+
     const user = await User.findByIdAndUpdate(id, updates, { new: true });
 
     if (!user) {
@@ -198,7 +227,6 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
     res.status(500).json({ message: "Lỗi khi cập nhật thông tin người dùng" });
   }
 };
-
 // Thay đổi mật khẩu
 export const changePassword = async (req: Request, res: Response): Promise<void> => {
   try {
