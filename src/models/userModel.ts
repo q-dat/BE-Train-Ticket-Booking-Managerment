@@ -8,8 +8,7 @@ export enum UserRole {
 
 export enum UserGender {
   MALE = 'male',
-  FEMALE = 'female',
-  OTHER = 'other'
+  FEMALE = 'female'
 }
 
 export interface IUser extends Document {
@@ -19,7 +18,7 @@ export interface IUser extends Document {
   password: string;
   phone: string;
   fullName: string;
-  gender?: string;
+  gender?: UserGender;
   role?: UserRole;
   profileImage?: string;
   bio?: string;
@@ -32,7 +31,17 @@ export interface IUser extends Document {
 const userSchema = new Schema<IUser>(
   {
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator: function (v: string) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        message: props => `${props.value} không phải là email hợp lệ!`
+      }
+    },
     password: { type: String, required: true, minlength: 6 },
     phone: {
       type: String,
@@ -40,7 +49,7 @@ const userSchema = new Schema<IUser>(
       unique: true,
       validate: {
         validator: function (v: string) {
-          return /\d{10}/.test(v); // Regex để kiểm tra số điện thoại hợp lệ (10 số)
+          return /\d{10}/.test(v);
         },
         message: props => `${props.value} số điện thoại không hợp lệ!`
       }
@@ -48,13 +57,13 @@ const userSchema = new Schema<IUser>(
     fullName: { type: String, required: true },
     gender: { type: String, enum: Object.values(UserGender), required: true },
     role: { type: String, enum: Object.values(UserRole), default: UserRole.USER },
-    profileImage: { type: String },
+    profileImage: { type: String, default: '' },
     bio: { type: String, maxlength: 200 },
     profession: { type: String },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
   },
-  { timestamps: true } // Tự động thêm createdAt và updatedAt
+  { timestamps: true }
 );
 
 // Middleware để hash mật khẩu trước khi lưu vào cơ sở dữ liệu
