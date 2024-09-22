@@ -4,7 +4,6 @@ import generateToken from '../middlewares/generateToken';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import fs from 'fs';
-import path from 'path';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -299,10 +298,3 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ message: "Lỗi khi lấy thông tin người dùng" });
   }
 }
-
-// 200 OK: phản hồi thành công
-// 201 Created: tạo thành công
-// 400 Bad Request: lỗi về yêu cầu không hợp lệ
-// 401 Unauthorized: thông tin xác thực không hợp lệ
-// 404 Not Found: không tìm thấy người dùng
-// 500 Internal Server Error: lỗi máy chủ

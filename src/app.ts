@@ -7,6 +7,7 @@ import { errorHandler } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 import { endpointsByCategory } from './views/endpointsByCategory';
+import locationRoutes from './routes/locationRoutes';
 
 dotenv.config();
 connectDB();
@@ -27,8 +28,8 @@ const app = express();
 //   credentials: true,
 // }));
 app.use(cors({
-  origin: 'http://localhost:5173', // Địa chỉ frontend
-  credentials: true,  // Để cho phép cookie được gửi
+  origin: 'http://localhost:5173',
+  credentials: true, 
 }));
 
 
@@ -36,6 +37,7 @@ app.use(cookieParser())
 
 app.use(express.json());
 
+app.use('/api/', locationRoutes)
 app.use('/api/auth', userRoutes);
 
 // Cấu hình EJS
