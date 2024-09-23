@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 import { Trip } from '~/models/tripModel'
 
-// GET all trips
+// Get All
 export const getTrips = async (req: Request, res: Response): Promise<void> => {
   try {
-    const locations = await Trip.find().populate('diem_di', 'name').populate('diem_den', 'name')
-    res.status(200).json({ message: 'Lấy danh sách chuyến đi thành công!', locations })
+    const trips = await Trip.find().populate('diem_di', 'name').populate('diem_den', 'name')
+    res.status(200).json({ message: 'Lấy danh sách chuyến đi thành công!', trips })
   } catch (error) {
     console.error('Lỗi khi lấy danh sách chuyến đi', error)
     res.status(500).json({ message: 'Lỗi máy chủ' })
   }
 }
-// Create a new trip
+// Post
 export const createTrip = async (req: Request, res: Response): Promise<void> => {
   try {
     const newTrip = new Trip(req.body)
@@ -21,7 +21,7 @@ export const createTrip = async (req: Request, res: Response): Promise<void> => 
     res.status(500).json({ message: 'Error creating trip', error })
   }
 }
-// Search trips
+//Search
 export const searchTrips = async (req: Request, res: Response): Promise<void> => {
   try {
     const searchCriteria: { diem_di?: string; diem_den?: string; ngay_khoi_hanh?: Date } = {}
@@ -46,8 +46,7 @@ export const searchTrips = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ message: 'Error searching trips', error })
   }
 }
-
-// Update a trip
+//Put
 export const updateTrip = async (req: Request, res: Response) => {
   try {
     const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -59,8 +58,6 @@ export const updateTrip = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Error updating trip', error })
   }
 }
-
-// Delete a trip
 export const deleteTrip = async (req: Request, res: Response) => {
   try {
     const deletedTrip = await Trip.findByIdAndDelete(req.params.id)
@@ -70,5 +67,20 @@ export const deleteTrip = async (req: Request, res: Response) => {
     res.status(200).json({ message: 'Trip deleted successfully' })
   } catch (error) {
     res.status(500).json({ message: 'Error deleting trip', error })
+  }
+}
+// Get By ID
+export const getTripById = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+  try {
+    const location = await Trip.findById(id).populate('diem_di', 'name').populate('diem_den', 'name')
+    if (!location) {
+      res.status(404).json({ message: 'Chuyến đi không tồn tại!' })
+      return
+    }
+    res.status(200).json({ message: 'Lấy chuyến đi thành công!', location })
+  } catch (error) {
+    console.error('Lỗi khi lấy chuyến đi', error)
+    res.status(500).json({ message: 'Lỗi máy chủ' })
   }
 }
