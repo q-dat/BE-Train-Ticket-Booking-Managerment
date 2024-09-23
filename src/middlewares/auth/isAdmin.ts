@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { CustomRequest, UserRole } from '../types/auth';
+import { CustomRequest, UserRole } from '../../types/auth';
 
 const isAdmin = (req: CustomRequest, res: Response, next: NextFunction): void => {
   if (req.role !== UserRole.ADMIN) {

@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import { endpointsByCategory } from './views/endpointsByCategory';
 import locationRoutes from './routes/locationRoutes';
+import tripRouter from './routes/tripRoutes';
 
 dotenv.config();
 connectDB();
@@ -37,7 +38,7 @@ app.use(cookieParser())
 
 app.use(express.json());
 
-app.use('/api/', locationRoutes)
+app.use('/api/', locationRoutes,tripRouter)
 app.use('/api/auth', userRoutes);
 
 // Cấu hình EJS

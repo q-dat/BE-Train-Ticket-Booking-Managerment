@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User, { IUser } from '../models/userModel';
-import generateToken from '../middlewares/generateToken';
+import generateToken from '../middlewares/auth/generateToken';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import fs from 'fs';

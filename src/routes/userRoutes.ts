@@ -1,7 +1,7 @@
 import express from 'express';
 import { changePassword, getAllUsers, getUserById, loginUser, logoutUser, registerUser, updateUserProfile, updateUserRole, upload } from '../controllers/userController';
-import isAdmin from '~/middlewares/isAdmin';
-import verifyToken from '~/middlewares/verifyToken';
+import isAdmin from '~/middlewares/auth/isAdmin';
+import verifyToken from '~/middlewares/auth/verifyToken';
 
 
 const userRoutes = express.Router();
