@@ -41,7 +41,6 @@ app.use(cookieParser())
 
 app.use(express.json())
 
-app.use('/api/', locationRoutes, tripRouter, chairRoutes, ticketCatalogRoutes)
 app.use('/api/auth', userRoutes)
 
 // Cấu hình EJS
