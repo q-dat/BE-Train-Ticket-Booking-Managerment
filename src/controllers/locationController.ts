@@ -18,15 +18,15 @@ export const createLocation = async (req: Request, res: Response): Promise<void>
     const savedLocation= await NewLocation.save()
     res.status(201).json(savedLocation)
   } catch (error) {
-    res.status(500).json({ message: 'Error creating trip', error })
+    res.status(500).json({ message: 'Error creating location', error })
   }
 }
 // Put
 export const updateLocation = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
-  const { name } = req.body
+  const { ten } = req.body
   try {
-    const location = await Location.findByIdAndUpdate(id, { name }, { new: true })
+    const location = await Location.findByIdAndUpdate(id, { ten }, { new: true })
     if (!location) {
       res.status(404).json({ message: 'Địa điểm không tồn tại!' })
       return
