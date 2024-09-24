@@ -9,7 +9,7 @@ import path from 'path'
 import { endpointsByCategory } from './views/endpointsByCategory'
 import locationRoutes from './routes/locationRoutes'
 import tripRouter from './routes/tripRoutes'
-import chairRoutes from './routes/chairRoutes'
+import chairRoutes from './routes/seatRoutes'
 import ticketCatalogRoutes from './routes/ticketCatalogRoutes'
 
 dotenv.config()
