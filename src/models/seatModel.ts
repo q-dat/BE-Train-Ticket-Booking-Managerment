@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
-export interface IChair extends Document {
+export interface ISeat extends Document {
   loai_ve_id: mongoose.Types.ObjectId
   ten: string
   gia: string
@@ -9,7 +9,7 @@ export interface IChair extends Document {
   updateAt: Date
 }
 
-const ChairSchema: Schema = new Schema({
+const SeatSchema: Schema = new Schema({
   loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket', required: true },
   ten: { type: String, required: true },
   gia: { type: String, required: true },
@@ -18,10 +18,10 @@ const ChairSchema: Schema = new Schema({
   updateAt: { type: Date, default: Date.now }
 })
 
-ChairSchema.pre<IChair>('save', function (next) {
+SeatSchema.pre<ISeat>('save', function (next) {
   this.updateAt = new Date()
   next()
 })
 
-const Chair = mongoose.model<IChair>('Chair', ChairSchema)
-export default Chair
+const Seat = mongoose.model<ISeat>('Seat', SeatSchema)
+export default Seat

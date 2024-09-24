@@ -19,18 +19,11 @@ export const endpointsByCategory = {
     { method: 'put', url: '/api/trips/:id', description: 'Update a trip by id' },
     { method: 'delete', url: '/api/trips/:id', description: 'Delete a trip by id' }
   ],
-  Chair: [
-    { method: 'get', url: '/api/chairs', description: 'Get all chairs' },
-    { method: 'get', url: '/api/chairs/:id', description: 'Get a chair by id' },
-    { method: 'post', url: '/api/chairs', description: 'Create a new chair' },
-    { method: 'put', url: '/api/chairs/:id', description: 'Update a chair by id' },
-    { method: 'delete', url: '/api/chairs/:id', description: 'Delete a chair by id' }
-  ],
-  Age: [
-    { method: 'get', url: '/api/ages', description: 'Get all age' },
-    { method: 'get', url: '/api/ages/:id', description: 'Get a age by id' },
-    { method: 'post', url: '/api/ages', description: 'Create a new age' },
-    { method: 'put', url: '/api/ages/:id', description: 'Update a age by id' },
-    { method: 'delete', url: '/api/ages/:id', description: 'Delete a age by id' }
+  Seat: [
+    { method: 'get', url: '/api/seats', description: 'Get all seats' },
+    { method: 'get', url: '/api/seats/:id', description: 'Get a seat by id' },
+    { method: 'post', url: '/api/seats', description: 'Create a new seat' },
+    { method: 'put', url: '/api/seats/:id', description: 'Update a seat by id' },
+    { method: 'delete', url: '/api/seats/:id', description: 'Delete a seat by id' }
   ]
 }
