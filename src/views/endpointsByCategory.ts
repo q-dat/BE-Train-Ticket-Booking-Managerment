@@ -32,5 +32,5 @@ export const endpointsByCategory = {
     { method: 'post', url: '/api/ages', description: 'Create a new age' },
     { method: 'put', url: '/api/ages/:id', description: 'Update a age by id' },
     { method: 'delete', url: '/api/ages/:id', description: 'Delete a age by id' }
-  ]
+  ],
 }
