@@ -10,6 +10,7 @@ import { endpointsByCategory } from './views/endpointsByCategory'
 import locationRoutes from './routes/locationRoutes'
 import tripRouter from './routes/tripRoutes'
 import chairRoutes from './routes/chairRoutes'
+import AgeRoutes from './routes/ageRouter'
 
 dotenv.config()
 connectDB()
@@ -40,7 +41,7 @@ app.use(cookieParser())
 
 app.use(express.json())
 
-app.use('/api/', locationRoutes, tripRouter, chairRoutes)
+app.use('/api/', locationRoutes, tripRouter, chairRoutes,AgeRoutes)
 app.use('/api/auth', userRoutes)
 
 // Cấu hình EJS

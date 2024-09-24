@@ -25,5 +25,12 @@ export const endpointsByCategory = {
     { method: 'post', url: '/api/chairs', description: 'Create a new chair' },
     { method: 'put', url: '/api/chairs/:id', description: 'Update a chair by id' },
     { method: 'delete', url: '/api/chairs/:id', description: 'Delete a chair by id' }
+  ],
+  Age: [
+    { method: 'get', url: '/api/ages', description: 'Get all age' },
+    { method: 'get', url: '/api/ages/:id', description: 'Get a age by id' },
+    { method: 'post', url: '/api/ages', description: 'Create a new age' },
+    { method: 'put', url: '/api/ages/:id', description: 'Update a age by id' },
+    { method: 'delete', url: '/api/ages/:id', description: 'Delete a age by id' }
   ]
 }
