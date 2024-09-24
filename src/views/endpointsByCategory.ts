@@ -25,5 +25,12 @@ export const endpointsByCategory = {
     { method: 'post', url: '/api/seats', description: 'Create a new seat' },
     { method: 'put', url: '/api/seats/:id', description: 'Update a seat by id' },
     { method: 'delete', url: '/api/seats/:id', description: 'Delete a seat by id' }
+  ],
+  Age: [
+    { method: 'get', url: '/api/ages', description: 'Get all age' },
+    { method: 'get', url: '/api/ages/:id', description: 'Get a age by id' },
+    { method: 'post', url: '/api/ages', description: 'Create a new age' },
+    { method: 'put', url: '/api/ages/:id', description: 'Update a age by id' },
+    { method: 'delete', url: '/api/ages/:id', description: 'Delete a age by id' }
   ]
 }

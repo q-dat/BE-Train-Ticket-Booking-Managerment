@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ITicketCatalog extends Document {
   _id: mongoose.Types.ObjectId;
-  ten: string; // Tên loại vé
+  ten: string;
   createAt: Date;
   updateAt: Date;
 }
@@ -17,7 +17,6 @@ const TicketCatalogSchema: Schema = new Schema({
   updateAt: { type: Date, default: Date.now },
 });
 
-// Cập nhật `updateAt` mỗi khi tài liệu được lưu
 TicketCatalogSchema.pre<ITicketCatalog>('save', function (next) {
   this.updateAt = new Date();
   next();

@@ -1,11 +1,6 @@
 import express from 'express';
-import {
-  getAllAge,
-  createAge,
-  deleteAge,
-  updateAge,
-  getAgeById
-} from '../controllers/ageController';
+import { createAge, deleteAge, getAgeById, getAllAge, updateAge } from '~/controllers/ageController';
+
 
 const AgeRoutes = express.Router();
 
