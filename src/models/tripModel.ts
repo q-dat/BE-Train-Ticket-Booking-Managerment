@@ -15,7 +15,7 @@ export interface ITrip extends Document {
 }
 
 const TripSchema: Schema = new Schema({
-  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'LoaiVe', required: true },
+  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket', required: true },
   diem_di: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   diem_den: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   ngay_khoi_hanh: { type: Date, required: true },
@@ -25,5 +25,9 @@ const TripSchema: Schema = new Schema({
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
 })
-
-export const Trip = mongoose.model<ITrip>('Trip', TripSchema)
+TripSchema.pre<ITrip>('save', function (next) {
+  this.updateAt = new Date()
+  next()
+})
+const Trip = mongoose.model<ITrip>('Trip', TripSchema)
+export default Trip;

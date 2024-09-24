@@ -18,5 +18,12 @@ export const endpointsByCategory = {
     { method: 'post', url: '/api/trips', description: 'Create a new trip' },
     { method: 'put', url: '/api/trips/:id', description: 'Update a trip by id' },
     { method: 'delete', url: '/api/trips/:id', description: 'Delete a trip by id' }
+  ],
+  Chair: [
+    { method: 'get', url: '/api/chairs', description: 'Get all chairs' },
+    { method: 'get', url: '/api/chairs/:id', description: 'Get a chair by id' },
+    { method: 'post', url: '/api/chairs', description: 'Create a new chair' },
+    { method: 'put', url: '/api/chairs/:id', description: 'Update a chair by id' },
+    { method: 'delete', url: '/api/chairs/:id', description: 'Delete a chair by id' }
   ]
 }

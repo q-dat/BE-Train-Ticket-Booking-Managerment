@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Trip } from '~/models/tripModel'
+import Trip from '~/models/tripModel'
 
 // Get All
 export const getTrips = async (req: Request, res: Response): Promise<void> => {
