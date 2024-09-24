@@ -11,7 +11,7 @@ export interface IAge extends Document {
 }
 
 const AgeSchema: Schema = new Schema({
-  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket', required: true },
+  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
   lua_tuoi: {
     type: String,
     required: true

@@ -7,53 +7,8 @@ export const getAllTicketCatalogs = async (req: Request, res: Response): Promise
     const ticketCatalogs = await TicketCatalog.find()
     res.status(200).json({ message: 'Lấy danh sách loại vé thành công!', ticketCatalogs })
   } catch (error) {
-    console.error('Lỗi khi lấy danh sách loại vé', error)
-    res.status(500).json({ message: 'Lỗi máy chủ' })
-  }
-}
-
-// Post
-export const createTicketCatalog = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const newTicketCatalog = await TicketCatalog.create(req.body)
-    const savedSeat = await newTicketCatalog.save()
-    res.status(201).json(savedSeat)
-  } catch (error) {
-    console.error('Lỗi khi tạo loại vé', error)
-    res.status(500).json({ message: 'Lỗi tạo loại vé', error })
-  }
-}
-
-// Put
-export const updateTicketCatalog = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const { ten } = req.body
-  try {
-    const ticketCatalog = await TicketCatalog.findByIdAndUpdate(id, { ten }, { new: true })
-    if (!ticketCatalog) {
-      res.status(404).json({ message: 'Loại vé không tồn tại!' })
-      return
-    }
-    res.status(200).json({ message: 'Cập nhật loại vé thành công!', ticketCatalog })
-  } catch (error) {
-    console.error('Lỗi khi cập nhật loại vé', error)
-    res.status(500).json({ message: 'Lỗi máy chủ' })
-  }
-}
-
-// Delete
-export const deleteTicketCatalog = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  try {
-    const ticketCatalog = await TicketCatalog.findByIdAndDelete(id)
-    if (!ticketCatalog) {
-      res.status(404).json({ message: 'Loại vé không tồn tại!' })
-      return
-    }
-    res.status(200).json({ message: 'Xóa loại vé thành công!' })
-  } catch (error) {
-    console.error('Lỗi khi xóa loại vé', error)
-    res.status(500).json({ message: 'Lỗi máy chủ' })
+    console.error('Lỗi khi lấy danh sách loại vé!', error)
+    res.status(500).json({ message: 'Lỗi máy chủ!' })
   }
 }
 
@@ -66,9 +21,54 @@ export const getTicketCatalogById = async (req: Request, res: Response): Promise
       res.status(404).json({ message: 'Loại vé không tồn tại!' })
       return
     }
-    res.status(200).json({ message: 'Lấy loại vé thành công!', ticketCatalog })
+    res.status(200).json({ message: 'Lấy loại vé theo id thành công!', ticketCatalog })
   } catch (error) {
-    console.error('Lỗi khi lấy loại vé', error)
+    console.error('Lỗi khi lấy loại vé!', error)
+    res.status(500).json({ message: 'Lỗi máy chủ!' })
+  }
+}
+
+// Post
+export const createTicketCatalog = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const newTicketCatalog = await TicketCatalog.create(req.body)
+    const savedTicketCatalog = await newTicketCatalog.save()
+    res.status(201).json({ message: 'Tạo loại vé thành công!', savedTicketCatalog })
+  } catch (error) {
+    console.error('Lỗi khi tạo loại vé!', error)
+    res.status(500).json({ message: 'Lỗi tạo loại vé!', error })
+  }
+}
+
+// Put
+export const updateTicketCatalog = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+  const { ten } = req.body
+  try {
+    const updatedTicketCatalog = await TicketCatalog.findByIdAndUpdate(id, { ten }, { new: true })
+    if (!updatedTicketCatalog) {
+      res.status(404).json({ message: 'Loại vé không tồn tại!' })
+      return
+    }
+    res.status(200).json({ message: 'Cập nhật loại vé thành công!', updatedTicketCatalog })
+  } catch (error) {
+    console.error('Lỗi khi cập nhật loại vé!', error)
+    res.status(500).json({ message: 'Lỗi máy chủ!' })
+  }
+}
+
+// Delete
+export const deleteTicketCatalog = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params
+  try {
+    const deletedTicketCatalog = await TicketCatalog.findByIdAndDelete(id)
+    if (!deletedTicketCatalog) {
+      res.status(404).json({ message: 'Loại vé không tồn tại!' })
+      return
+    }
+    res.status(200).json({ message: 'Xóa loại vé thành công!', deletedTicketCatalog })
+  } catch (error) {
+    console.error('Lỗi khi xóa loại vé', error)
     res.status(500).json({ message: 'Lỗi máy chủ' })
   }
 }

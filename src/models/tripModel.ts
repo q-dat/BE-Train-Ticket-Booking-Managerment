@@ -15,7 +15,7 @@ export interface ITrip extends Document {
 }
 
 const TripSchema: Schema = new Schema({
-  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket', required: true },
+  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
   diem_di: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   diem_den: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   ngay_khoi_hanh: { type: Date, required: true },

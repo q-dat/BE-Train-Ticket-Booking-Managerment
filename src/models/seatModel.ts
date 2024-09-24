@@ -10,7 +10,7 @@ export interface ISeat extends Document {
 }
 
 const SeatSchema: Schema = new Schema({
-  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket', required: true },
+  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
   ten: { type: String, required: true },
   gia: { type: String, required: true },
   mo_ta: { type: String },
