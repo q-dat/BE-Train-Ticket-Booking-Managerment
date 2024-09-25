@@ -57,7 +57,7 @@ const userSchema = new Schema<IUser>(
     fullName: { type: String, required: true },
     gender: { type: String, enum: Object.values(UserGender), required: true },
     role: { type: String, enum: Object.values(UserRole), default: UserRole.USER },
-    profileImage: { type: String, default: '' },
+    profileImage: { type: String },
     bio: { type: String, maxlength: 200 },
     profession: { type: String },
     createdAt: { type: Date, default: Date.now },
@@ -70,7 +70,6 @@ const userSchema = new Schema<IUser>(
 userSchema.pre('save', async function (next) {
   const user = this as IUser;
 
-  // Kiểm tra xem mật khẩu có được thay đổi không
   if (!user.isModified('password')) return next();
 
   try {
