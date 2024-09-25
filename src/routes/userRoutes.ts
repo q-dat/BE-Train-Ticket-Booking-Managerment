@@ -1,19 +1,15 @@
 import express from 'express';
-import { changePassword, getAllUsers, getUserById, loginUser, logoutUser, registerUser, updateUserProfile, updateUserRole, upload } from '../controllers/userController';
+import { changePassword, loginUser, logoutUser, registerUser, updateUserProfile, updateUserRole } from '../controllers/userController';
 import isAdmin from '~/middlewares/auth/isAdmin';
 import verifyToken from '~/middlewares/auth/verifyToken';
 
-
 const userRoutes = express.Router();
 
-userRoutes.post('/register', upload.single('profileImage'), registerUser); 
+userRoutes.post('/register', registerUser);
 userRoutes.post('/login', loginUser);
-userRoutes.post('/logout', logoutUser); 
-userRoutes.put('/users/:id/role', verifyToken, isAdmin, updateUserRole); 
-userRoutes.put('/users/:id/profile', upload.single('profileImage'), verifyToken, updateUserProfile);
-userRoutes.put('/users/:id/password', verifyToken, changePassword); 
-userRoutes.get('/users', verifyToken, isAdmin, getAllUsers);
-userRoutes.get('/users/:id', verifyToken, isAdmin, getUserById);
-
+userRoutes.post('/logout', logoutUser);
+userRoutes.put('/edit-role/:id', verifyToken, isAdmin, updateUserRole);
+userRoutes.patch('/edit-profile', verifyToken, updateUserProfile);
+userRoutes.patch('/change-password', verifyToken, changePassword);
 
 export default userRoutes;

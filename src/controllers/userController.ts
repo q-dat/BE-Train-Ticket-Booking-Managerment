@@ -1,19 +1,7 @@
 import { Request, Response } from 'express';
 import User, { IUser } from '../models/userModel';
 import generateToken from '../middlewares/auth/generateToken';
-import mongoose from 'mongoose';
-import multer from 'multer';
-import fs from 'fs';
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  }
-});
-export const upload = multer({ storage });
+import { CustomRequest } from '~/types/auth';
 
 // Đăng ký user
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -32,16 +20,13 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    const profileImage = req.file ? req.file.path : undefined;
-
     const user = await User.create({
       username,
       email,
       password,
       phone,
       fullName,
-      gender,
-      profileImage
+      gender
     });
 
     if (user) {
@@ -107,39 +92,11 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
 // Đăng xuất user
 export const logoutUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'none',
-    });
+    res.clearCookie('token');
     res.status(200).json({ message: "Đăng xuất thành công!" });
   } catch (error) {
     console.error("Không thể đăng xuất", error);
     res.status(500).json({ message: "Lỗi khi đăng xuất" });
-  }
-};
-
-// Xoá user
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { id } = req.params;
-
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
-      return;
-    }
-
-    const user = await User.findByIdAndDelete(id);
-
-    if (!user) {
-      res.status(404).json({ message: "Người dùng không tìm thấy" });
-      return;
-    }
-
-    res.status(200).json({ message: "Xóa người dùng thành công" });
-  } catch (error) {
-    console.error("Lỗi khi xóa người dùng", error);
-    res.status(500).json({ message: "Lỗi khi xóa người dùng" });
   }
 };
 
@@ -148,16 +105,6 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
   try {
     const { id } = req.params;
     const { role } = req.body;
-
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
-      return;
-    }
-
-    if (!role) {
-      res.status(400).json({ message: "Yêu cầu vai trò" });
-      return;
-    }
 
     const user = await User.findByIdAndUpdate(id, { role }, { new: true });
 
@@ -174,79 +121,59 @@ export const updateUserRole = async (req: Request, res: Response): Promise<void>
 };
 
 // Cập nhật thông tin người dùng
-export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
+export const updateUserProfile = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { username, email, phone, fullName, gender } = req.body;
-
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
-      return;
+    const { userId, fullName, username, profileImage, bio, profession } = req.body;
+    if (!userId) {
+      return res.status(400).send({ message: "ID người dùng là bắt buộc" });
     }
-
-    const userExists = await User.findOne({
-      $or: [
-        { username: username },
-        { email: email },
-        { phone: phone }
-      ],
-      _id: { $ne: id }
-    });
-
-    if (userExists) {
-      res.status(400).json({ message: "Email, username hoặc số điện thoại đã tồn tại" });
-      return;
-    }
-
-    const currentUser = await User.findById(id);
-    if (!currentUser) {
-      res.status(404).json({ message: "Người dùng không tìm thấy" });
-      return;
-    }
-
-    const updates: Partial<IUser> = { username, email, phone, fullName, gender };
-    if (req.file) {
-
-      if (currentUser.profileImage && fs.existsSync(currentUser.profileImage)) {
-        fs.unlinkSync(currentUser.profileImage);
-      }
-      updates.profileImage = req.file.path;
-    }
-
-    const user = await User.findByIdAndUpdate(id, updates, { new: true });
-
+    const user = await User.findById(userId) as IUser | null;
     if (!user) {
-      res.status(404).json({ message: "Người dùng không tìm thấy" });
-      return;
+      return res.status(404).send({ message: "Người dùng không tồn tại" });
     }
 
-    res.status(200).json({ message: "Cập nhật thông tin người dùng thành công", user });
+    if (fullName !== undefined) user.fullName = fullName;
+    if (username !== undefined) user.username = username;
+    if (profileImage !== undefined) user.profileImage = profileImage;
+    if (bio !== undefined) user.bio = bio;
+    if (profession !== undefined) user.profession = profession;
+
+    await user.save();
+    res.status(200).send({
+      message: "Cập nhật hồ sơ thành công",
+      user: {
+        _id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        email: user.email,
+        profileImage: user.profileImage,
+        bio: user.bio,
+        profession: user.profession,
+        role: user.role,
+      },
+    });
   } catch (error) {
-    console.error("Lỗi khi cập nhật thông tin người dùng", error);
-    res.status(500).json({ message: "Lỗi khi cập nhật thông tin người dùng" });
+    console.error("Lỗi khi cập nhật hồ sơ người dùng", error);
+    res.status(500).send({ message: "Lỗi khi cập nhật hồ sơ người dùng" });
   }
 };
+
 // Thay đổi mật khẩu
-export const changePassword = async (req: Request, res: Response): Promise<void> => {
+export const changePassword = async (req: CustomRequest, res: Response) => {
+  const userId = req.userId;
+  console.log(userId)
+  const { oldPassword, newPassword } = req.body;
+
   try {
-    const { id } = req.params;
-    const { oldPassword, newPassword } = req.body;
-
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
-      return;
-    }
-
-    const user = await User.findById(id);
+    const user = await User.findById(userId);
+    console.log(user)
     if (!user) {
-      res.status(404).json({ message: "Người dùng không tìm thấy" });
-      return;
+      return res.status(404).json({ message: "Người dùng không tồn tại" });
     }
 
     const isMatch = await user.comparePassword(oldPassword);
     if (!isMatch) {
-      res.status(401).json({ message: "Mật khẩu cũ không khớp" });
-      return;
+      return res.status(401).json({ message: "Mật khẩu cũ không đúng" });
     }
 
     if (newPassword.length < 6) {
@@ -257,44 +184,9 @@ export const changePassword = async (req: Request, res: Response): Promise<void>
     user.password = newPassword;
     await user.save();
 
-    res.status(200).json({ message: "Thay đổi mật khẩu thành công" });
+    return res.status(200).json({ message: "Thay đổi mật khẩu thành công" });
   } catch (error) {
-    console.error("Lỗi khi thay đổi mật khẩu", error);
-    res.status(500).json({ message: "Lỗi khi thay đổi mật khẩu" });
+    return res.status(500).json({ message: "Đã xảy ra lỗi", error });
   }
 };
 
-// Hiện tất cả user
-export const getAllUsers = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const users = await User.find({}, 'id email role');
-    res.status(200).json({ message: "Lấy danh sách người dùng thành công", users });
-  } catch (error) {
-    console.error("Lỗi khi lấy danh sách người dùng", error);
-    res.status(500).json({ message: "Lỗi khi lấy danh sách người dùng" });
-  }
-};
-
-// Lấy thông tin người dùng theo ID
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { id } = req.params;
-
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Yêu cầu ID người dùng hợp lệ" });
-      return;
-    }
-
-    const user = await User.findById(id);
-
-    if (!user) {
-      res.status(404).json({ message: "Người dùng không tìm thấy" });
-      return;
-    }
-
-    res.status(200).json({ message: "Lấy thông tin người dùng thành công", user });
-  } catch (error) {
-    console.error("Lỗi khi lấy thông tin người dùng", error);
-    res.status(500).json({ message: "Lỗi khi lấy thông tin người dùng" });
-  }
-}
