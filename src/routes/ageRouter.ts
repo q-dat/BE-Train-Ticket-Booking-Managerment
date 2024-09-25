@@ -2,14 +2,14 @@ import express from 'express';
 import { createAge, deleteAge, getAgeById, getAllAge, updateAge } from '~/controllers/ageController';
 
 
-const AgeRoutes = express.Router();
+const ageRoutes = express.Router();
 
-AgeRoutes.get('/ages', getAllAge);
-AgeRoutes.post('/ages', createAge);
-AgeRoutes.get('/ages/:id', getAgeById);
-AgeRoutes.put('/ages/:id', updateAge);
-AgeRoutes.delete('/ages/:id', deleteAge);
+ageRoutes.get('/ages', getAllAge);
+ageRoutes.post('/ages', createAge);
+ageRoutes.get('/ages/:id', getAgeById);
+ageRoutes.put('/ages/:id', updateAge);
+ageRoutes.delete('/ages/:id', deleteAge);
 
-export default AgeRoutes;
+export default ageRoutes;
 
 
