@@ -21,6 +21,9 @@ TicketCatalogSchema.pre<ITicketCatalog>('save', function (next) {
   this.updateAt = new Date();
   next();
 });
-
+TicketCatalogSchema.pre<ITicketCatalog>('updateOne', function (next) {
+  this.set({ updateAt: new Date() })
+  next()
+})
 const TicketCatalog = mongoose.model<ITicketCatalog>('TicketCatalog', TicketCatalogSchema);
 export default TicketCatalog;

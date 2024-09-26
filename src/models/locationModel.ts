@@ -20,6 +20,9 @@ LocationSchema.pre<ILocation>('save', function (next) {
   this.updateAt = new Date()
   next()
 })
-
+LocationSchema.pre<ILocation>('updateOne', function (next) {
+  this.set({ updateAt: new Date() })
+  next()
+})
 const Location = mongoose.model<ILocation>('Location', LocationSchema)
 export default Location

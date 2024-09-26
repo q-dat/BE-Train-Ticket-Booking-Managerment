@@ -21,6 +21,10 @@ PostCatalogSchema.pre<IPostCatalog>('save', function (next) {
     this.updateAt = new Date();
     next();
 });
+PostCatalogSchema.pre<IPostCatalog>('updateOne', function (next) {
+    this.set({ updateAt: new Date() });
+    next();
+});
 
 const PostCatalog = mongoose.model<IPostCatalog>('PostCatalog', PostCatalogSchema);
 export default PostCatalog;

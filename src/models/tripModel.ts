@@ -31,5 +31,9 @@ TripSchema.pre<ITrip>('save', function (next) {
   this.updateAt = new Date()
   next()
 })
+TripSchema.pre<ITrip>('updateOne', function (next) {
+  this.set({ updateAt: new Date() })
+  next()
+})
 const Trip = mongoose.model<ITrip>('Trip', TripSchema)
 export default Trip

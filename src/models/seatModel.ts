@@ -33,6 +33,9 @@ SeatSchema.pre<ISeat>('save', function (next) {
   this.updateAt = new Date()
   next()
 })
-
+SeatSchema.pre<ISeat>('updateOne', function (next) {
+  this.set({ updateAt: new Date() })
+  next()
+})
 const Seat = mongoose.model<ISeat>('Seat', SeatSchema)
 export default Seat

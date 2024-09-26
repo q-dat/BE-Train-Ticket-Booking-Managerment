@@ -28,6 +28,10 @@ AgeSchema.pre<IAge>('save', function (next) {
   this.updateAt = new Date()
   next()
 })
+AgeSchema.pre<IAge>('updateOne', function (next) {
+  this.set({ updateAt: new Date() })
+  next()
+})
 
 const Age = mongoose.model<IAge>('Age', AgeSchema)
 export default Age

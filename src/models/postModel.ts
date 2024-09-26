@@ -20,6 +20,9 @@ PostSchema.pre<IPost>('save', function (next) {
     this.updateAt = new Date()
     next()
 })
-
+PostSchema.pre<IPost>('updateOne', function (next) {
+    this.set({ updateAt: new Date() })
+    next()
+  })
 const Post = mongoose.model<IPost>('Post', PostSchema)
 export default Post
