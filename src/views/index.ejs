@@ -54,13 +54,21 @@
       white-space: pre-wrap;
       overflow: auto;
     }
+
+    .total-get-count {
+      font-size: 15px;
+    }
   </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800 font-sans">
   <div class="container mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
     <h1 class="text-4xl font-extrabold text-indigo-900 mb-6 text-center">LacLacTrip</h1>
-    <h1 class="text-4xl font-extrabold text-indigo-900 mb-6 text-start">API Endpoints</h1>
+    <h1 class="text-4xl font-extrabold text-indigo-900 mb-6 text-start ">API Endpoints
+      <sup class="total-get-count">
+        (Total: <span id="total-get-count"></span>)
+      </sup>
+    </h1>
     <p class="text-lg mb-4 text-gray-700">Base URL:
       <a href="http://localhost:6001/" class="text-blue-500 underline font-medium">http://localhost:6001</a>
     </p>
@@ -95,19 +103,30 @@
       </section>
       <% }) %>
   </div>
-
   <script>
     $(document).ready(function () {
       $('.fetch-data').click(function () {
         const url = $(this).data('url');
-        $.get(url, function (data) {
-          const jsonOutput = JSON.stringify(data, null, 2);
-          $('#output-' + url.replace(/\//g, '-')).text(jsonOutput).show();
-        }).fail(function () {
-          alert('Lỗi khi lấy dữ liệu.');
-        });
+        const outputElement = $('#output-' + url.replace(/\//g, '-'));
+
+        if (outputElement.is(':visible')) {
+          outputElement.hide();
+          $(this).text('Xem dữ liệu');
+        } else {
+          $.get(url, function (data) {
+            const jsonOutput = JSON.stringify(data, null, 2);
+            outputElement.text(jsonOutput).show();
+          }).fail(function () {
+            alert('Lỗi khi lấy dữ liệu.');
+          });
+
+          $(this).text('Ẩn dữ liệu');
+        }
       });
+      const totalEndpoints = $('.endpoint-button').length;
+      $('#total-get-count').text(totalEndpoints);
     });
+
   </script>
 </body>
 
