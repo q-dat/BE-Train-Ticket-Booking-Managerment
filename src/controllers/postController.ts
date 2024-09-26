@@ -13,9 +13,8 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 }
 // Get By ID
 export const getPostById = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
     try {
-      const post = await Post.findById(id)
+      const post = await Post.findById(req.params.id)
       if (!post) {
         res.status(404).json({ message: 'Bài viết không tồn tại!' })
         return

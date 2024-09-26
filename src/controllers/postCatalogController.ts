@@ -14,9 +14,8 @@ export const getAllPostCatalogs = async (req: Request, res: Response): Promise<v
 
 // Get By ID
 export const getPostCatalogById = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
     try {
-        const postCatalog = await PostCatalog.findById(id)
+        const postCatalog = await PostCatalog.findById(req.params.id)
         if (!postCatalog) {
             res.status(404).json({ message: 'Loại bài viết không tồn tại!' })
             return
@@ -57,9 +56,8 @@ export const updatePostCatalog = async (req: Request, res: Response): Promise<vo
 
 // Delete
 export const deletePostCatalog = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params
     try {
-        const deletedPostCatalog = await PostCatalog.findByIdAndDelete(id)
+        const deletedPostCatalog = await PostCatalog.findByIdAndDelete(req.params.id)
         if (!deletedPostCatalog) {
             res.status(404).json({ message: 'Loại bài viết không tồn tại!' })
             return

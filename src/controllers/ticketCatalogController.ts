@@ -42,10 +42,8 @@ export const createTicketCatalog = async (req: Request, res: Response): Promise<
 
 // Put
 export const updateTicketCatalog = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
-  const { ten } = req.body
   try {
-    const updatedTicketCatalog = await TicketCatalog.findByIdAndUpdate(id, { ten }, { new: true })
+    const updatedTicketCatalog = await TicketCatalog.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!updatedTicketCatalog) {
       res.status(404).json({ message: 'Loại vé không tồn tại!' })
       return
@@ -59,9 +57,8 @@ export const updateTicketCatalog = async (req: Request, res: Response): Promise<
 
 // Delete
 export const deleteTicketCatalog = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
   try {
-    const deletedTicketCatalog = await TicketCatalog.findByIdAndDelete(id)
+    const deletedTicketCatalog = await TicketCatalog.findByIdAndDelete(req.params.id)
     if (!deletedTicketCatalog) {
       res.status(404).json({ message: 'Loại vé không tồn tại!' })
       return

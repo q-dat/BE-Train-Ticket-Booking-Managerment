@@ -13,9 +13,8 @@ export const getAllLocations = async (req: Request, res: Response): Promise<void
 }
 // Get By ID
 export const getLocationById = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
   try {
-    const location = await Location.findById(id)
+    const location = await Location.findById(req.params.id)
     if (!location) {
       res.status(404).json({ message: 'Địa điểm không tồn tại!' })
       return
@@ -52,9 +51,8 @@ export const updateLocation = async (req: Request, res: Response): Promise<void>
 }
 // Delete
 export const deleteLocation = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
   try {
-    const deletedLocation = await Location.findByIdAndDelete(id)
+    const deletedLocation = await Location.findByIdAndDelete(req.params.id)
     if (!deletedLocation) {
       res.status(404).json({ message: 'Địa điểm không tồn tại!' })
       return
