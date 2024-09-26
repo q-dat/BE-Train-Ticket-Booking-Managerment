@@ -26,6 +26,20 @@ export const endpointsByCategory = {
     { method: 'put', url: '/api/seats/:id', description: 'Update a seat by id' },
     { method: 'delete', url: '/api/seats/:id', description: 'Delete a seat by id' }
   ],
+  Post: [
+    { method: 'get', url: '/api/posts', description: 'Get all seats' },
+    { method: 'get', url: '/api/posts/:id', description: 'Get a seat by id' },
+    { method: 'post', url: '/api/posts', description: 'Create a new seat' },
+    { method: 'put', url: '/api/posts/:id', description: 'Update a seat by id' },
+    { method: 'delete', url: '/api/posts/:id', description: 'Delete a seat by id' }
+  ],
+  PostCatalog: [
+    { method: 'get', url: '/api/post-catalogs', description: 'Get all ticket catalogs' },
+    { method: 'get', url: '/api/post-catalogs/:id', description: 'Get a ticket catalog by id' },
+    { method: 'post', url: '/api/post-catalogs', description: 'Create a new ticket catalog' },
+    { method: 'put', url: '/api/post-catalogs/:id', description: 'Update a ticket catalog by id' },
+    { method: 'delete', url: '/api/post-catalogs/:id', description: 'Delete a ticket catalog by id' }
+  ],
   Age: [
     { method: 'get', url: '/api/ages', description: 'Get all age' },
     { method: 'get', url: '/api/ages/:id', description: 'Get a age by id' },

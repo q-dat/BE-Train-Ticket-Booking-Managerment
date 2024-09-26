@@ -12,6 +12,8 @@ import tripRouter from './routes/tripRoutes'
 import chairRoutes from './routes/seatRoutes'
 import ticketCatalogRoutes from './routes/ticketCatalogRoutes'
 import ageRoutes from './routes/ageRouter'
+import postRoutes from './routes/postRoutes'
+import postCatalogRoutes from './routes/postCatalogRoutes'
 
 dotenv.config()
 connectDB()
@@ -46,6 +48,8 @@ app.use('/api/', chairRoutes)
 app.use('/api/', ticketCatalogRoutes)
 app.use('/api/', ageRoutes)
 app.use('/api/', locationRoutes)
+app.use('/api/', postRoutes)
+app.use('/api/', postCatalogRoutes)
 app.use('/api/auth', userRoutes)
 
 // Cấu hình EJS
