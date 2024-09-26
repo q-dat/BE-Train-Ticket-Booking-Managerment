@@ -2,13 +2,13 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface ITicketCatalog extends Document {
   _id: mongoose.Types.ObjectId;
-  ten: string;
+  name: string;
   createAt: Date;
   updateAt: Date;
 }
 
 const TicketCatalogSchema: Schema = new Schema({
-  ten: {
+  name: {
     type: String,
     unique: true,
     required: true, 

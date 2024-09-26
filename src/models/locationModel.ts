@@ -2,13 +2,13 @@ import mongoose, { Schema, Document } from 'mongoose'
 
 export interface ILocation extends Document {
   _id: mongoose.Types.ObjectId
-  ten: string
+  name: string
   createAt: Date
   updateAt: Date
 }
 
 const LocationSchema: Schema = new Schema({
-  ten: {
+  name: {
     type: String,
     unique: true,
     required: true

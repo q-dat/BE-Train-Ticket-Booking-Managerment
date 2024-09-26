@@ -4,7 +4,7 @@ import Trip from '~/models/tripModel'
 // Get All
 export const getTrips = async (req: Request, res: Response): Promise<void> => {
   try {
-    const trips = await Trip.find().populate('diem_di', 'ten').populate('diem_den', 'ten')
+    const trips = await Trip.find().populate('diem_di', 'name').populate('diem_den', 'name')
     res.status(200).json({ message: 'Lấy danh sách chuyến đi thành công!', trips })
   } catch (error) {
     console.error('Lỗi khi lấy danh sách chuyến đi!', error)
@@ -15,7 +15,7 @@ export const getTrips = async (req: Request, res: Response): Promise<void> => {
 export const getTripById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
   try {
-    const location = await Trip.findById(id).populate('diem_di', 'ten').populate('diem_den', 'ten')
+    const location = await Trip.findById(id).populate('diem_di', 'name').populate('diem_den', 'name')
     if (!location) {
       res.status(404).json({ message: 'Chuyến đi không tồn tại!' })
       return
@@ -55,7 +55,7 @@ export const searchTrips = async (req: Request, res: Response): Promise<void> =>
       searchTrip.ngay_khoi_hanh = new Date(req.query.ngay_khoi_hanh as string)
     }
 
-    const trips = await Trip.find(searchTrip).populate('diem_di', 'ten').populate('diem_den', 'ten')
+    const trips = await Trip.find(searchTrip).populate('diem_di', 'name').populate('diem_den', 'name')
 
     res.status(200).json({ message: 'Tìm kiếm chuyến đi thành công!', trips })
   } catch (error) {

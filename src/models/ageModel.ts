@@ -2,25 +2,24 @@ import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IAge extends Document {
   _id: mongoose.Types.ObjectId
-  loai_ve_id: mongoose.Types.ObjectId
-  lua_tuoi: string
-  gia: number
-  mo_ta?: string
+  name: string
+  price: number
+  des?: string
   createAt: Date
   updateAt: Date
 }
 
 const AgeSchema: Schema = new Schema({
-  loai_ve_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
-  lua_tuoi: {
+  name: {
     type: String,
+    unique: true,
     required: true
   },
-  gia: {
+  price: {
     type: Number,
     required: true
   },
-  mo_ta: { type: String },
+  des: { type: String },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
 })
