@@ -14,6 +14,7 @@ import ticketCatalogRoutes from './routes/ticketCatalogRoutes'
 import ageRoutes from './routes/ageRoutes'
 import postRoutes from './routes/postRoutes'
 import postCatalogRoutes from './routes/postCatalogRoutes'
+import uploadRoutes from './routes/uploadRoutes'
 
 dotenv.config()
 connectDB()
@@ -51,6 +52,7 @@ app.use('/api/', locationRoutes)
 app.use('/api/', postRoutes)
 app.use('/api/', postCatalogRoutes)
 app.use('/api/auth', userRoutes)
+app.use('/api/', uploadRoutes)
 
 // Cấu hình EJS
 app.set('view engine', 'ejs')

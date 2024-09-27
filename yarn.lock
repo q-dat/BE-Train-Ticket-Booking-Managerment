@@ -641,11 +641,18 @@ chokidar@^3.5.2, chokidar@^3.5.3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-cloudinary@^2.5.0:
-  version "2.5.0"
-  resolved "https://registry.npmjs.org/cloudinary/-/cloudinary-2.5.0.tgz"
-  integrity sha512-gPkyylFpyBAXiErAnMgZBlpwztHuZoik/OTLQM9oswjlzYHLMtQGoh0oisPBQvVHQxHmBUjcgwsAi393HDedqQ==
+cloudinary-core@^2.13.0:
+  version "2.13.1"
+  resolved "https://registry.npmjs.org/cloudinary-core/-/cloudinary-core-2.13.1.tgz"
+  integrity sha512-z53GPNWnvU0Zi+ns8CIVbZBfj7ps/++zDvwIyiFuq5p1MoK+KUCg0k5mBceDDHTnx1gHmHUd9aohS+gDxPNt6w==
+
+cloudinary@^1.21.0, cloudinary@^1.41.3:
+  version "1.41.3"
+  resolved "https://registry.npmjs.org/cloudinary/-/cloudinary-1.41.3.tgz"
+  integrity sha512-4o84y+E7dbif3lMns+p3UW6w6hLHEifbX/7zBJvaih1E9QNMZITENQ14GPYJC4JmhygYXsuuBb9bRA3xWEoOfg==
   dependencies:
+    cloudinary-core "^2.13.0"
+    core-js "^3.30.1"
     lodash "^4.17.21"
     q "^1.5.1"
 
@@ -720,6 +727,11 @@ cookie@0.6.0:
   version "0.6.0"
   resolved "https://registry.npmjs.org/cookie/-/cookie-0.6.0.tgz"
   integrity sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==
+
+core-js@^3.30.1:
+  version "3.38.1"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-3.38.1.tgz"
+  integrity sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==
 
 core-util-is@~1.0.0:
   version "1.0.3"
@@ -1531,7 +1543,7 @@ lodash.once@^4.0.0:
   resolved "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz"
   integrity sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==
 
-lodash@^4.17.21:
+lodash@^4.17.21, lodash@>=4.0:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -1708,6 +1720,11 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
   integrity sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==
+
+multer-storage-cloudinary@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npmjs.org/multer-storage-cloudinary/-/multer-storage-cloudinary-4.0.0.tgz"
+  integrity sha512-25lm9R6o5dWrHLqLvygNX+kBOxprzpmZdnVKH4+r68WcfCt8XV6xfQaMuAg+kUE5Xmr8mJNA4gE0AcBj9FJyWA==
 
 multer@^1.4.5-lts.1:
   version "1.4.5-lts.1"

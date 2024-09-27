@@ -53,5 +53,6 @@ export const endpointsByCategory = {
     { method: 'post', url: '/api/ticket-catalogs', description: 'Create a new ticket catalog' },
     { method: 'put', url: '/api/ticket-catalogs/:id', description: 'Update a ticket catalog by id' },
     { method: 'delete', url: '/api/ticket-catalogs/:id', description: 'Delete a ticket catalog by id' }
-  ]
+  ],
+  Cloudinary: [{ method: 'post', url: '/api/uploads', description: 'Upload a new file' }]
 }
