@@ -8,10 +8,10 @@ import cookieParser from 'cookie-parser'
 import path from 'path'
 import { endpointsByCategory } from './views/endpointsByCategory'
 import locationRoutes from './routes/locationRoutes'
-import tripRouter from './routes/tripRoutes'
+import tripRoutes from './routes/tripRoutes'
 import chairRoutes from './routes/seatRoutes'
 import ticketCatalogRoutes from './routes/ticketCatalogRoutes'
-import ageRoutes from './routes/ageRouter'
+import ageRoutes from './routes/ageRoutes'
 import postRoutes from './routes/postRoutes'
 import postCatalogRoutes from './routes/postCatalogRoutes'
 
@@ -43,7 +43,7 @@ app.use(
 app.use(cookieParser())
 
 app.use(express.json())
-app.use('/api/', tripRouter)
+app.use('/api/', tripRoutes)
 app.use('/api/', chairRoutes)
 app.use('/api/', ticketCatalogRoutes)
 app.use('/api/', ageRoutes)
