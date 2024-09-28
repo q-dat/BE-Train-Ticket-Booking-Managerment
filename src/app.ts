@@ -45,8 +45,9 @@ app.use(
 
 app.use(cookieParser())
 
-app.use('/api/auth', userRoutes)
 app.use(express.json())
+
+app.use('/api/auth', userRoutes)
 app.use('/api/', tripRoutes)
 app.use('/api/', chairRoutes)
 app.use('/api/', ticketCatalogRoutes)
