@@ -1,6 +1,7 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IPost extends Document {
+  _id: mongoose.Types.ObjectId;
     post_catalog_id: mongoose.Types.ObjectId,
     title: string
     content: string

@@ -8,6 +8,7 @@ export enum SeatStatus {
   Maintenance = 4, // Ghế đang bảo trì
 }
 export interface ISeat extends Document {
+  _id: mongoose.Types.ObjectId;
   seat_catalog_id: mongoose.Types.ObjectId
   name: string
   price: string

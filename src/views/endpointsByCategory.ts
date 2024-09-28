@@ -26,6 +26,13 @@ export const endpointsByCategory = {
     { method: 'put', url: '/api/seats/:id', description: 'Update a seat by id' },
     { method: 'delete', url: '/api/seats/:id', description: 'Delete a seat by id' }
   ],
+  SeatCatalog: [
+    { method: 'get', url: '/api/seat-catalogs', description: 'Get all seat catalogs' },
+    { method: 'get', url: '/api/seat-catalogs/:id', description: 'Get a seat catalog by id' },
+    { method: 'post', url: '/api/seat-catalogs', description: 'Create a new seat catalog' },
+    { method: 'put', url: '/api/seat-catalogs/:id', description: 'Update a seat catalog' },
+    { method: 'delete', url: '/api/seat-catalogs/:id', description: ' Delete a seat catalog' }
+  ],
   Post: [
     { method: 'get', url: '/api/posts', description: 'Get all seats' },
     { method: 'get', url: '/api/posts/:id', description: 'Get a seat by id' },
