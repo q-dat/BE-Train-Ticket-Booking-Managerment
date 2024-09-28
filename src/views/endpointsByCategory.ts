@@ -1,3 +1,5 @@
+import Vehicle from "~/models/vehicleModel";
+
 export const endpointsByCategory = {
   Auth: [
     { method: 'post', url: '/api/auth/register', description: 'Register a new user' },
@@ -19,6 +21,14 @@ export const endpointsByCategory = {
     { method: 'put', url: '/api/trips/:id', description: 'Update a trip by id' },
     { method: 'delete', url: '/api/trips/:id', description: 'Delete a trip by id' }
   ],
+  Vehicle:[
+    {method: 'get', url: '/api/vehicles', description:'Get all vehicles'},
+    {method: 'get', url: '/api/vehicles/:id', description:'Get a vehicle by id'},
+    { method: 'post', url: '/api/vehicles', description:'Create a new vehicle'},
+    { method: 'put', url: '/api/vehicles/:id', description:'Update a vehicle by id'},
+    { method: 'delete', url: '/api/vehicles/:id', description:'Delete a vehicle by id'}
+  ]
+  ,
   Seat: [
     { method: 'get', url: '/api/seats', description: 'Get all seats' },
     { method: 'get', url: '/api/seats/:id', description: 'Get a seat by id' },
