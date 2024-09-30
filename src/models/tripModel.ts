@@ -3,7 +3,6 @@ import { ILocation } from './locationModel'
 
 export interface ITrip extends Document {
   _id: mongoose.Types.ObjectId
-  ticket_catalog_id: mongoose.Types.ObjectId
   departure_point: ILocation['_id']
   destination_point: ILocation['_id']
   price: Number
@@ -16,7 +15,6 @@ export interface ITrip extends Document {
 }
 
 const TripSchema: Schema = new Schema({
-  ticket_catalog_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
   departure_point: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   destination_point: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   price: { type: Number, required: true },

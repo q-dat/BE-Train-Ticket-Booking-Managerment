@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import Vehicle from '~/models/vehicleModel'
 
+//Get All
 export const getVehicles = async (req: Request, res: Response): Promise<void> => {
   try {
     const vehicles = await Vehicle.find()
