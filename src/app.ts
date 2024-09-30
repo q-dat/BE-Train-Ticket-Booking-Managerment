@@ -17,6 +17,7 @@ import postCatalogRoutes from './routes/postCatalogRoutes'
 import uploadRoutes from './routes/uploadRoutes'
 import seatCatalogRoutes from './routes/seatCatalogRoutes'
 import vehicleRoutes from './routes/vehicleRoutes'
+import ticketRoutes from './routes/ticketRoutes'
 
 dotenv.config()
 connectDB()
@@ -58,6 +59,7 @@ app.use('/api/', postCatalogRoutes)
 app.use('/api/', uploadRoutes)
 app.use('/api/', seatCatalogRoutes)
 app.use('/api/', vehicleRoutes)
+app.use('/api/', ticketRoutes)
 
 // Cấu hình EJS
 app.set('view engine', 'ejs')
