@@ -1,10 +1,10 @@
 import express from 'express'
 import {
-    getAllPostCatalogs,
-    createPostCatalog,
-    deletePostCatalog,
-    updatePostCatalog,
-    getPostCatalogById
+  getAllPostCatalogs,
+  createPostCatalog,
+  deletePostCatalog,
+  updatePostCatalog,
+  getPostCatalogById
 } from '~/controllers/postCatalogController'
 
 const postCatalogRoutes = express.Router()

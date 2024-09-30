@@ -1,5 +1,11 @@
 import express from 'express'
-import { getAllLocations, createLocation, deleteLocation, updateLocation,getLocationById } from '~/controllers/locationController'
+import {
+  getAllLocations,
+  createLocation,
+  deleteLocation,
+  updateLocation,
+  getLocationById
+} from '~/controllers/locationController'
 
 const locationRoutes = express.Router()
 locationRoutes.get('/locations', getAllLocations)

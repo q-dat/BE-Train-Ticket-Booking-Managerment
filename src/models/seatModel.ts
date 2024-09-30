@@ -1,14 +1,14 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
 export enum SeatStatus {
-  Inactive = 0,    // Ghế không hoạt động
-  Active = 1,      // Ghế đang hoạt động
-  Reserved = 2,    // Ghế đã được đặt
-  Broken = 3,      // Ghế bị hỏng
-  Maintenance = 4, // Ghế đang bảo trì
+  Inactive = 0, // Ghế không hoạt động
+  Active = 1, // Ghế đang hoạt động
+  Reserved = 2, // Ghế đã được đặt
+  Broken = 3, // Ghế bị hỏng
+  Maintenance = 4 // Ghế đang bảo trì
 }
 export interface ISeat extends Document {
-  _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId
   seat_catalog_id: mongoose.Types.ObjectId
   name: string
   price: string

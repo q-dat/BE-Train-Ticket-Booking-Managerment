@@ -19,7 +19,7 @@ export const getAgeById = async (req: Request, res: Response): Promise<void> => 
       res.status(404).json({ message: 'Lứa tuổi không tìm thấy!' })
       return
     }
-    res.status(200).json({message:'Lấy lứa tuổi theo id thành công!', age})
+    res.status(200).json({ message: 'Lấy lứa tuổi theo id thành công!', age })
   } catch (error) {
     res.status(500).json({ message: 'Lỗi khi lấy lứa tuổi', error })
   }
@@ -30,7 +30,7 @@ export const createAge = async (req: Request, res: Response): Promise<void> => {
   try {
     const newAge = await Age.create(req.body)
     const savedAge = await newAge.save()
-    res.status(201).json({message: 'Tạo lứa tuổi thành công!', savedAge})
+    res.status(201).json({ message: 'Tạo lứa tuổi thành công!', savedAge })
   } catch (error) {
     res.status(500).json({ message: 'Lỗi khi tạo lứa tuổi!', error })
   }
@@ -44,7 +44,7 @@ export const updateAge = async (req: Request, res: Response): Promise<void> => {
       res.status(404).json({ message: 'Lứa tuổi không tìm thấy!' })
       return
     }
-    res.status(200).json({message:'Cập nhật lứa tuổi thành công!', updatedAge})
+    res.status(200).json({ message: 'Cập nhật lứa tuổi thành công!', updatedAge })
   } catch (error) {
     res.status(500).json({ message: 'Lỗi khi cập nhật lứa tuổi!', error })
   }

@@ -20,5 +20,5 @@ SeatCatalogSchema.pre<ISeatCatalog>('save', function (next) {
 SeatCatalogSchema.pre<ISeatCatalog>('updateOne', function (next) {
   this.set({ updateAt: new Date() })
 })
-const SeatCatalog = mongoose.model<ISeatCatalog>('SeatCatalog',SeatCatalogSchema)
+const SeatCatalog = mongoose.model<ISeatCatalog>('SeatCatalog', SeatCatalogSchema)
 export default SeatCatalog

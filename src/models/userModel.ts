@@ -1,5 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import mongoose, { Document, Schema } from 'mongoose'
+import bcrypt from 'bcryptjs'
 
 export enum UserRole {
   USER = 'user',
@@ -12,20 +12,20 @@ export enum UserGender {
 }
 
 export interface IUser extends Document {
-  _id: mongoose.Types.ObjectId;
-  username: string;
-  email: string;
-  password: string;
-  phone: string;
-  fullName: string;
-  gender?: UserGender;
-  role?: UserRole;
-  profileImage?: string;
-  bio?: string;
-  profession?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  comparePassword: (candidatePassword: string) => Promise<boolean>;
+  _id: mongoose.Types.ObjectId
+  username: string
+  email: string
+  password: string
+  phone: string
+  fullName: string
+  gender?: UserGender
+  role?: UserRole
+  profileImage?: string
+  bio?: string
+  profession?: string
+  createdAt?: Date
+  updatedAt?: Date
+  comparePassword: (candidatePassword: string) => Promise<boolean>
 }
 
 const userSchema = new Schema<IUser>(
@@ -37,9 +37,9 @@ const userSchema = new Schema<IUser>(
       unique: true,
       validate: {
         validator: function (v: string) {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
         },
-        message: props => `${props.value} không phải là email hợp lệ!`
+        message: (props) => `${props.value} không phải là email hợp lệ!`
       }
     },
     password: { type: String, required: true, minlength: 6 },
@@ -49,9 +49,9 @@ const userSchema = new Schema<IUser>(
       unique: true,
       validate: {
         validator: function (v: string) {
-          return /\d{10}/.test(v);
+          return /\d{10}/.test(v)
         },
-        message: props => `${props.value} số điện thoại không hợp lệ!`
+        message: (props) => `${props.value} số điện thoại không hợp lệ!`
       }
     },
     fullName: { type: String, required: true },
@@ -64,32 +64,32 @@ const userSchema = new Schema<IUser>(
     updatedAt: { type: Date, default: Date.now }
   },
   { timestamps: true }
-);
+)
 
 // Middleware để hash mật khẩu trước khi lưu vào cơ sở dữ liệu
 userSchema.pre('save', async function (next) {
-  const user = this as IUser;
+  const user = this as IUser
 
-  if (!user.isModified('password')) return next();
+  if (!user.isModified('password')) return next()
 
   try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(user.password, saltRounds);
-    user.password = hashedPassword;
-    next();
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(user.password, saltRounds)
+    user.password = hashedPassword
+    next()
   } catch (error) {
-    next(error instanceof Error ? error : new Error('Đã xảy ra lỗi không xác định khi mã hóa mật khẩu'));
+    next(error instanceof Error ? error : new Error('Đã xảy ra lỗi không xác định khi mã hóa mật khẩu'))
   }
-});
+})
 
 // Phương thức so sánh mật khẩu người dùng nhập vào (mật khẩu chưa được mã hóa) với mật khẩu đã được mã hóa (được lưu trong cơ sở dữ liệu)
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
   try {
-    return await bcrypt.compare(candidatePassword, this.password);
+    return await bcrypt.compare(candidatePassword, this.password)
   } catch (error) {
-    throw new Error('Lỗi khi so sánh mật khẩu');
+    throw new Error('Lỗi khi so sánh mật khẩu')
   }
-};
+}
 
-const User = mongoose.model<IUser>('User', userSchema);
-export default User;
+const User = mongoose.model<IUser>('User', userSchema)
+export default User

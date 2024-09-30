@@ -16,8 +16,8 @@ export const getSeatCatalogById = async (req: Request, res: Response): Promise<v
   try {
     const seatCatalog = await SeatCatalog.findById(req.params.id)
     if (!seatCatalog) {
-       res.status(404).json({ message: 'Không tìm thấy danh mục ghế!' })
-       return
+      res.status(404).json({ message: 'Không tìm thấy danh mục ghế!' })
+      return
     }
     res.status(200).json({ message: 'Lấy danh mục ghế thành công!', seatCatalog })
   } catch (error) {
@@ -25,7 +25,7 @@ export const getSeatCatalogById = async (req: Request, res: Response): Promise<v
     res.status(500).json({ message: 'Lỗi máy chủ!' })
   }
 }
-//Post 
+//Post
 export const createSeatCatalog = async (req: Request, res: Response): Promise<void> => {
   try {
     const newSeatCatalog = await SeatCatalog.create(req.body)
@@ -51,7 +51,7 @@ export const updateSeatCatalog = async (req: Request, res: Response): Promise<vo
   }
 }
 //Delete
- export const deleteSeatCatalog = async (req: Request, res: Response): Promise<void> => {
+export const deleteSeatCatalog = async (req: Request, res: Response): Promise<void> => {
   try {
     const deletedSeatCatalog = await SeatCatalog.findByIdAndDelete(req.params.id)
     if (!deletedSeatCatalog) {
