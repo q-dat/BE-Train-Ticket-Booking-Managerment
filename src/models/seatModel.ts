@@ -1,19 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
-export enum SeatStatus {
-  Inactive = 0, // Ghế không hoạt động
-  Active = 1, // Ghế đang hoạt động
-  Reserved = 2, // Ghế đã được đặt
-  Broken = 3, // Ghế bị hỏng
-  Maintenance = 4 // Ghế đang bảo trì
-}
 export interface ISeat extends Document {
   _id: mongoose.Types.ObjectId
   seat_catalog_id: mongoose.Types.ObjectId
   name: string
-  price: string
+  price: number
   des?: string
-  status: number
+  status: string
   ordinal_numbers: number
   createAt: Date
   updateAt: Date
@@ -22,9 +15,9 @@ export interface ISeat extends Document {
 const SeatSchema: Schema = new Schema({
   seat_catalog_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SeatCatalog', required: true },
   name: { type: String, required: true },
-  price: { type: String, required: true },
+  price: { type: Number, required: true },
   des: { type: String },
-  status: { type: Number, required: true, enum: Object.values(SeatStatus) },
+  status: { type: String, required: true },
   ordinal_numbers: { type: Number, require: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }

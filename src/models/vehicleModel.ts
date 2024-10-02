@@ -2,6 +2,7 @@ import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IVehicle extends Document {
   _id: mongoose.Types.ObjectId
+  trip_id: mongoose.Types.ObjectId
   name: string
   status: string
   createAt: Date
@@ -9,7 +10,8 @@ export interface IVehicle extends Document {
 }
 
 const VehicleSchema: Schema = new Schema({
-  name: { type: String, required: true }, 
+  trip_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SeatCatalog', required: true },
+  name: { type: String, required: true },
   status: { type: String, required: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }

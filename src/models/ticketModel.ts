@@ -3,14 +3,14 @@ import mongoose, { Schema, Document } from 'mongoose'
 export interface ITicket extends Document {
   _id: mongoose.Types.ObjectId
   ticket_catalog_id:mongoose.Types.ObjectId
-  vehicle_id: mongoose.Types.ObjectId
+  seat_id: mongoose.Types.ObjectId
   trip_id: mongoose.Types.ObjectId
   createAt: Date
   updateAt: Date
 }
 const TicketSchema: Schema = new Schema({
   ticket_catalog_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketCatalog', required: true },
-  vehicle_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle', required: true },
+  seat_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Seat', required: true },
   trip_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Trip', required: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }

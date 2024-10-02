@@ -5,7 +5,19 @@ import Ticket from '~/models/ticketModel'
 export const getAllTickets = async (req: Request, res: Response): Promise<void> => {
   try {
     const tickets = await Ticket.find()
-      .populate('vehicle_id', 'name status')
+      .populate({
+        path: 'seat_id',
+        select: 'name status',
+        populate: {
+          path: 'seat_catalog_id',
+          select: 'name',
+          populate: {
+            path: 'vehicle_id',
+            select: 'name status'
+          }
+        }
+      })
+
       .populate('ticket_catalog_id', 'name')
       .populate({
         path: 'trip_id',
@@ -26,7 +38,19 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
 export const getTicketById = async (req: Request, res: Response): Promise<void> => {
   try {
     const ticket = await Ticket.findById(req.params.id)
-      .populate('vehicle_id', 'name status')
+      .populate({
+        path: 'seat_id',
+        select: 'name status',
+        populate: {
+          path: 'seat_catalog_id',
+          select: 'name',
+          populate: {
+            path: 'vehicle_id',
+            select: 'name status'
+          }
+        }
+      })
+
       .populate('ticket_catalog_id', 'name')
       .populate({
         path: 'trip_id',
@@ -36,7 +60,6 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
           { path: 'destination_point', select: 'name' }
         ]
       })
-
     if (!ticket) {
       res.status(404).json({ message: 'Vé không tồn tại!' })
       return
@@ -66,7 +89,7 @@ export const createTicket = async (req: Request, res: Response): Promise<void> =
 export const updateTicket = async (req: Request, res: Response): Promise<void> => {
   try {
     const updatedTicket = await Ticket.findByIdAndUpdate(req.params.id, req.body, { new: true })
-      .populate('vehicle_id')
+      .populate('seat_id')
       .populate('ticket_catalog_id')
       .populate('trip_id')
 

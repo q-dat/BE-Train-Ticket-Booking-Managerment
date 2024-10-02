@@ -5,6 +5,8 @@ import SeatCatalog from '~/models/seatCatalogModel'
 export const getSeatCataLogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const seatCatalogs = await SeatCatalog.find()
+    .populate('vehicle_id', 'name')
+
     res.status(200).json({ message: 'Lấy danh sách danh mục ghế thành công!', seatCatalogs })
   } catch (error) {
     console.error('Lỗi khi lấy danh sách danh mục ghế!')
@@ -15,6 +17,8 @@ export const getSeatCataLogs = async (req: Request, res: Response): Promise<void
 export const getSeatCatalogById = async (req: Request, res: Response): Promise<void> => {
   try {
     const seatCatalog = await SeatCatalog.findById(req.params.id)
+    .populate('vehicle_id', 'name')
+
     if (!seatCatalog) {
       res.status(404).json({ message: 'Không tìm thấy danh mục ghế!' })
       return
