@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import Trip from '~/models/tripModel'
 
 // Get All
@@ -14,6 +15,10 @@ export const getTrips = async (req: Request, res: Response): Promise<void> => {
 // Get By ID
 export const getTripById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const location = await Trip.findById(req.params.id)
       .populate('departure_point', 'name')
       .populate('destination_point', 'name')

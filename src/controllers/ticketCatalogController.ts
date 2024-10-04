@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import TicketCatalog from '../models/ticketCatalogModel'
 
 // Get All
@@ -16,6 +17,10 @@ export const getAllTicketCatalogs = async (req: Request, res: Response): Promise
 export const getTicketCatalogById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const ticketCatalog = await TicketCatalog.findById(id)
     if (!ticketCatalog) {
       res.status(404).json({ message: 'Loại vé không tồn tại!' })

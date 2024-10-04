@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import Post from '~/models/postModel'
 
 // Get All
@@ -14,6 +15,10 @@ export const getPosts = async (req: Request, res: Response): Promise<void> => {
 // Get By ID
 export const getPostById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const post = await Post.findById(req.params.id)
     if (!post) {
       res.status(404).json({ message: 'Bài viết không tồn tại!' })

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import SeatCatalog from '~/models/seatCatalogModel'
 
 //Get All
@@ -16,6 +17,10 @@ export const getSeatCataLogs = async (req: Request, res: Response): Promise<void
 //Get By ID
 export const getSeatCatalogById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const seatCatalog = await SeatCatalog.findById(req.params.id)
     .populate('vehicle_id', 'name')
 

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import Location from '../models/locationModel'
 
 // Get All
@@ -14,6 +15,10 @@ export const getAllLocations = async (req: Request, res: Response): Promise<void
 // Get By ID
 export const getLocationById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const location = await Location.findById(req.params.id)
     if (!location) {
       res.status(404).json({ message: 'Địa điểm không tồn tại!' })

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import Ticket from '~/models/ticketModel'
 
 // Get All
@@ -37,6 +38,10 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
 // Get By ID
 export const getTicketById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const ticket = await Ticket.findById(req.params.id)
       .populate({
         path: 'seat_id',
@@ -121,3 +126,4 @@ export const deleteTicket = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ message: 'Lỗi máy chủ!' })
   }
 }
+

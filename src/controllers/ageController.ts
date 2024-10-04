@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import Age from '../models/ageModel'
 
 // Get All
@@ -14,6 +15,10 @@ export const getAllAge = async (req: Request, res: Response): Promise<void> => {
 // Get By ID
 export const getAgeById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const age = await Age.findById(req.params.id)
     if (!age) {
       res.status(404).json({ message: 'Lứa tuổi không tìm thấy!' })

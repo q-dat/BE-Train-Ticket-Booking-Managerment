@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import mongoose from 'mongoose'
 import PostCatalog from '../models/postCatalogModel'
 
 // Get All
@@ -15,6 +16,10 @@ export const getAllPostCatalogs = async (req: Request, res: Response): Promise<v
 // Get By ID
 export const getPostCatalogById = async (req: Request, res: Response): Promise<void> => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: 'ID không hợp lệ!' })
+      return
+    }
     const postCatalog = await PostCatalog.findById(req.params.id)
     if (!postCatalog) {
       res.status(404).json({ message: 'Loại bài viết không tồn tại!' })
