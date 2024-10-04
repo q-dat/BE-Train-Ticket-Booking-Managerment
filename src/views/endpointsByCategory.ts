@@ -66,6 +66,7 @@ export const endpointsByCategory = {
   Ticket:[
     { method: 'get', url: '/api/tickets', description: 'Get all tickets' },
     { method: 'get', url: '/api/tickets/:id', description: 'Get a ticket by id' },
+    { method: 'get', url: '/api/ticket/search?', description: 'Search a ticket' },
     { method: 'post', url: '/api/tickets', description: 'Create a new ticket' },
     { method: 'put', url: '/api/tickets/:id', description: 'Update a ticket by id' },
     { method: 'delete', url: '/api/tickets/:id', description: 'Delete a ticket by id' }
