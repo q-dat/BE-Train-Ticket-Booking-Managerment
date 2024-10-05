@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
-import Seat from '~/models/seatModel'
+import Seat, { ISeat } from '~/models/seatModel'
 import TicketCatalog from '~/models/ticketCatalogModel'
 import Ticket from '~/models/ticketModel'
-import Trip from '~/models/tripModel'
+import Trip, { ITrip } from '~/models/tripModel'
 import Location from '~/models/locationModel'
 
 // Get All
@@ -12,7 +12,7 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
     const tickets = await Ticket.find()
       .populate({
         path: 'seat_id',
-        select: 'name status',
+        select: 'name price status',
         populate: {
           path: 'seat_catalog_id',
           select: 'name',
@@ -32,6 +32,11 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
           { path: 'destination_point', select: 'name' }
         ]
       })
+    tickets.forEach((ticket: any) => {
+      const seatPrice = ticket.seat_id?.price || 0
+      const tripPrice = ticket.trip_id?.price || 0
+      ticket.price = seatPrice + tripPrice
+    })
 
     res.status(200).json({ message: 'Lấy danh sách vé thành công!', tickets })
   } catch (error) {
@@ -49,7 +54,7 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
     const ticket = await Ticket.findById(req.params.id)
       .populate({
         path: 'seat_id',
-        select: 'name status',
+        select: 'name price status',
         populate: {
           path: 'seat_catalog_id',
           select: 'name',
@@ -73,6 +78,13 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
       res.status(404).json({ message: 'Vé không tồn tại!' })
       return
     }
+    const seatId = ticket.seat_id as unknown as ISeat
+    const seatPrice = seatId?.price || 0
+
+    const tripId = ticket.trip_id as unknown as { price: number }
+    const tripPrice = tripId?.price || 0
+
+    ticket.price = seatPrice + tripPrice
 
     res.status(200).json({ message: 'Lấy vé theo ID thành công!', ticket })
   } catch (error) {
