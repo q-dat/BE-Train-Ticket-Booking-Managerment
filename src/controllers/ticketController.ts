@@ -145,57 +145,99 @@ export const deleteTicket = async (req: Request, res: Response): Promise<void> =
 //Search
 export const searchTickets = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { ticket_catalog_name, seat_name, departure_point_name, destination_point_name } = req.query
+    const {
+      ticket_catalog_name,
+      seat_name,
+      departure_point_name,
+      destination_point_name,
+      departure_date,
+      arrival_date
+    } = req.query
 
     const query: { [key: string]: any } = {}
-
     if (ticket_catalog_name) {
-      const ticketCatalogs = await TicketCatalog.find({ name: { $regex: ticket_catalog_name, $options: 'i' } })
+      const ticketCatalogs = await TicketCatalog.find({
+        name: { $regex: ticket_catalog_name, $options: 'i' }
+      })
       if (ticketCatalogs.length > 0) {
         query.ticket_catalog_id = { $in: ticketCatalogs.map((tc) => tc._id) }
       }
     }
-
     if (seat_name) {
-      const seats = await Seat.find({ name: { $regex: seat_name, $options: 'i' } })
+      const seats = await Seat.find({
+        name: { $regex: seat_name, $options: 'i' }
+      })
       if (seats.length > 0) {
         query.seat_id = { $in: seats.map((s) => s._id) }
       }
     }
-
     let tripQuery: { [key: string]: any } = {}
-
     if (departure_point_name) {
-      tripQuery['departure_point'] = await Location.findOne({ name: { $regex: departure_point_name, $options: 'i' } })
+      const departurePoint = await Location.findOne({
+        name: { $regex: departure_point_name, $options: 'i' }
+      })
+      if (departurePoint) {
+        tripQuery['departure_point'] = departurePoint._id
+      }
     }
-
     if (destination_point_name) {
-      tripQuery['destination_point'] = await Location.findOne({
+      const destinationPoint = await Location.findOne({
         name: { $regex: destination_point_name, $options: 'i' }
       })
+      if (destinationPoint) {
+        tripQuery['destination_point'] = destinationPoint._id
+      }
     }
-
+    if (departure_date && typeof departure_date === 'string') {
+      tripQuery['departure_date'] = { $gte: new Date(departure_date) }
+    }
+    if (arrival_date && typeof arrival_date === 'string') {
+      tripQuery['arrival_date'] = { $lte: new Date(arrival_date) }
+    }
     if (Object.keys(tripQuery).length > 0) {
       const trips = await Trip.find(tripQuery)
       if (trips.length > 0) {
         query.trip_id = { $in: trips.map((t) => t._id) }
       }
     }
-
     if (Object.keys(query).length === 0) {
       res.status(404).json({ message: 'Không tìm thấy vé nào!' })
       return
     }
+    const tickets = await Ticket.find(query)
+      .populate({
+        path: 'seat_id',
+        select: 'name price status',
+        populate: {
+          path: 'seat_catalog_id',
+          select: 'name',
+          populate: {
+            path: 'vehicle_id',
+            select: 'name status'
+          }
+        }
+      })
 
-    const tickets = await Ticket.find(query).populate('ticket_catalog_id seat_id trip_id')
-    console.log(query)
-
+      .populate('ticket_catalog_id', 'name')
+      .populate({
+        path: 'trip_id',
+        select: '-createAt -updateAt -__v',
+        populate: [
+          { path: 'departure_point', select: 'name' },
+          { path: 'destination_point', select: 'name' }
+        ]
+      })
+    tickets.forEach((ticket: any) => {
+      const seatPrice = ticket.seat_id?.price || 0
+      const tripPrice = ticket.trip_id?.price || 0
+      ticket.price = seatPrice + tripPrice
+    })
     if (tickets.length === 0) {
       res.status(404).json({ message: 'Không tìm thấy vé nào!' })
       return
     }
 
-    res.status(200).json({ message: 'Tìm kiếm vé thành công!', tickets })
+    res.status(200).json({ message: 'Lấy danh sách vé thành công!', tickets })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: 'Lỗi máy chủ!' })
