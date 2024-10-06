@@ -155,54 +155,96 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
     } = req.query
 
     const query: { [key: string]: any } = {}
+    const tripQuery: { [key: string]: any } = {}
+    let isValidSearch = false
+
     if (ticket_catalog_name) {
       const ticketCatalogs = await TicketCatalog.find({
         name: { $regex: ticket_catalog_name, $options: 'i' }
       })
       if (ticketCatalogs.length > 0) {
         query.ticket_catalog_id = { $in: ticketCatalogs.map((tc) => tc._id) }
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Tên loại vé không hợp lệ!' })
+        return
       }
     }
+
     if (seat_name) {
       const seats = await Seat.find({
         name: { $regex: seat_name, $options: 'i' }
       })
       if (seats.length > 0) {
         query.seat_id = { $in: seats.map((s) => s._id) }
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Tên ghế không hợp lệ!' })
+        return
       }
     }
-    let tripQuery: { [key: string]: any } = {}
+
     if (departure_point_name) {
       const departurePoint = await Location.findOne({
         name: { $regex: departure_point_name, $options: 'i' }
       })
       if (departurePoint) {
         tripQuery['departure_point'] = departurePoint._id
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Điểm khởi hành không hợp lệ!' })
+        return
       }
+    } else {
+      res.status(400).json({ message: 'Cần cung cấp điểm khởi hành!' })
+      return
     }
+
     if (destination_point_name) {
       const destinationPoint = await Location.findOne({
         name: { $regex: destination_point_name, $options: 'i' }
       })
       if (destinationPoint) {
         tripQuery['destination_point'] = destinationPoint._id
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Điểm đến không hợp lệ!' })
+        return
+      }
+    } else {
+      res.status(400).json({ message: 'Cần cung cấp điểm đến!' })
+      return
+    }
+
+    if (departure_date && typeof departure_date === 'string') {
+      const departureDate = new Date(departure_date)
+      if (!isNaN(departureDate.getTime())) {
+        tripQuery['departure_date'] = { $gte: departureDate }
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Ngày khởi hành không hợp lệ!' })
+        return
       }
     }
-    if (departure_date && typeof departure_date === 'string') {
-      tripQuery['departure_date'] = { $gte: new Date(departure_date) }
-    }
+
     if (arrival_date && typeof arrival_date === 'string') {
-      tripQuery['arrival_date'] = { $lte: new Date(arrival_date) }
+      const arrivalDate = new Date(arrival_date)
+      if (!isNaN(arrivalDate.getTime())) {
+        tripQuery['arrival_date'] = { $lte: arrivalDate }
+        isValidSearch = true
+      } else {
+        res.status(400).json({ message: 'Ngày đến không hợp lệ!' })
+        return
+      }
     }
     if (Object.keys(tripQuery).length > 0) {
       const trips = await Trip.find(tripQuery)
       if (trips.length > 0) {
         query.trip_id = { $in: trips.map((t) => t._id) }
+      } else {
+        res.status(404).json({ message: 'Không tìm thấy chuyến đi nào phù hợp!' })
+        return
       }
-    }
-    if (Object.keys(query).length === 0) {
-      res.status(404).json({ message: 'Không tìm thấy vé nào!' })
-      return
     }
     const tickets = await Ticket.find(query)
       .populate({
@@ -232,10 +274,6 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       const tripPrice = ticket.trip_id?.price || 0
       ticket.price = seatPrice + tripPrice
     })
-    if (tickets.length === 0) {
-      res.status(404).json({ message: 'Không tìm thấy vé nào!' })
-      return
-    }
 
     res.status(200).json({ message: 'Lấy danh sách vé thành công!', tickets })
   } catch (error) {
