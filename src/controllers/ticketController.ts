@@ -151,7 +151,7 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       departure_point_name,
       destination_point_name,
       departure_date,
-      arrival_date
+      return_date
     } = req.query
 
     const query: { [key: string]: any } = {}
@@ -227,10 +227,10 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       }
     }
 
-    if (arrival_date && typeof arrival_date === 'string') {
-      const arrivalDate = new Date(arrival_date)
-      if (!isNaN(arrivalDate.getTime())) {
-        tripQuery['arrival_date'] = { $lte: arrivalDate }
+    if (return_date && typeof return_date === 'string') {
+      const returnDate = new Date(return_date)
+      if (!isNaN(returnDate.getTime())) {
+        tripQuery['return_date'] = { $lte: returnDate }
         isValidSearch = true
       } else {
         res.status(400).json({ message: 'Ngày đến không hợp lệ!' })

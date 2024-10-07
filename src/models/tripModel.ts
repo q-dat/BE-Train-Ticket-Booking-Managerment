@@ -8,8 +8,8 @@ export interface ITrip extends Document {
   price: Number
   departure_date: Date
   departure_time: string
-  arrival_date: Date
-  arrival_time: string
+  return_date: Date
+  return_time: string
   createAt: Date
   updateAt: Date
 }
@@ -20,8 +20,8 @@ const TripSchema: Schema = new Schema({
   price: { type: Number, required: true },
   departure_date: { type: Date, required: true },
   departure_time: { type: String, required: true },
-  arrival_date: { type: Date, required: true },
-  arrival_time: { type: String, required: true },
+  return_date: { type: Date, required: true },
+  return_time: { type: String, required: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
 })
