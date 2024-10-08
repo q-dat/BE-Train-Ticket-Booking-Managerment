@@ -6,6 +6,8 @@ import Post from '~/models/postModel'
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
   try {
     const post = await Post.find()
+    .populate('post_catalog_id', 'name')
+
     res.status(200).json({ message: 'Lấy danh sách bài viết thành công!', post })
   } catch (error) {
     console.error('Lỗi khi lấy danh sách bài viết', error)
