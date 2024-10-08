@@ -158,32 +158,23 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
     const tripQuery: { [key: string]: any } = {}
     let isValidSearch = false
 
-    if (ticket_catalog_name) {
-      const ticketCatalogs = await TicketCatalog.find({
-        name: { $regex: ticket_catalog_name, $options: 'i' }
-      })
-      if (ticketCatalogs.length > 0) {
-        query.ticket_catalog_id = { $in: ticketCatalogs.map((tc) => tc._id) }
-        isValidSearch = true
-      } else {
-        res.status(400).json({ message: 'Tên loại vé không hợp lệ!' })
-        return
-      }
+    if (!ticket_catalog_name) {
+      res.status(400).json({ message: 'Cần cung cấp loại vé!' })
+      return
     }
 
-    if (seat_name) {
-      const seats = await Seat.find({
-        name: { $regex: seat_name, $options: 'i' }
-      })
-      if (seats.length > 0) {
-        query.seat_id = { $in: seats.map((s) => s._id) }
-        isValidSearch = true
-      } else {
-        res.status(400).json({ message: 'Tên ghế không hợp lệ!' })
-        return
-      }
-    }
+    const ticketCatalog = await TicketCatalog.findOne({
+      name: { $regex: ticket_catalog_name, $options: 'i' }
+    })
 
+    if (!ticketCatalog) {
+      res.status(404).json({ message: 'Loại vé không hợp lệ!' })
+      return
+    } else {
+      query.ticket_catalog_id = ticketCatalog._id
+      isValidSearch = true
+    }
+    
     if (departure_point_name) {
       const departurePoint = await Location.findOne({
         name: { $regex: departure_point_name, $options: 'i' }
@@ -269,6 +260,10 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
           { path: 'destination_point', select: 'name' }
         ]
       })
+      if (tickets.length === 0) {
+        res.status(404).json({ message: 'Không tìm thấy vé nào phù hợp!' })
+        return
+    }
     tickets.forEach((ticket: any) => {
       const seatPrice = ticket.seat_id?.price || 0
       const tripPrice = ticket.trip_id?.price || 0
