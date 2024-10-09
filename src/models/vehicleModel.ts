@@ -11,7 +11,7 @@ export interface IVehicle extends Document {
 
 const VehicleSchema: Schema = new Schema({
   trip_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SeatCatalog', required: true },
-  name: { type: String, required: true },
+  name: { type: String, unique: true, required: true },
   status: { type: String, required: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
