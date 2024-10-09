@@ -36,6 +36,11 @@ export const getTripById = async (req: Request, res: Response): Promise<void> =>
 // Post
 export const createTrip = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { departure_point, destination_point } = req.body
+    if (departure_point === destination_point) {
+      res.status(400).json({ message: 'Điểm đi và điểm đến không được trùng nhau!' })
+      return
+    }
     const newTrip = new Trip(req.body)
     const savedTrip = await newTrip.save()
     res.status(201).json(savedTrip)
@@ -74,7 +79,8 @@ export const updateTrip = async (req: Request, res: Response) => {
   try {
     const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!updatedTrip) {
-      return res.status(404).json({ message: 'Chuyến đi không tồn tại!' })
+      res.status(404).json({ message: 'Chuyến đi không tồn tại!' })
+      return 
     }
     res.status(200).json({ messega: 'Cập nhật chuyến đi thành công!', updatedTrip })
   } catch (error) {
