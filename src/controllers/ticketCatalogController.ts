@@ -36,6 +36,12 @@ export const getTicketCatalogById = async (req: Request, res: Response): Promise
 // Post
 export const createTicketCatalog = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { name } = req.body
+    const existingTicketCatalog = await TicketCatalog.findOne({ name })
+    if (existingTicketCatalog) {
+      res.status(400).json({ message: 'Loại vé đã tồn tại!' })
+      return
+    }
     const newTicketCatalog = await TicketCatalog.create(req.body)
     const savedTicketCatalog = await newTicketCatalog.save()
     res.status(201).json({ message: 'Tạo loại vé thành công!', savedTicketCatalog })
