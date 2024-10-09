@@ -5,8 +5,7 @@ import SeatCatalog from '~/models/seatCatalogModel'
 //Get All
 export const getSeatCataLogs = async (req: Request, res: Response): Promise<void> => {
   try {
-    const seatCatalogs = await SeatCatalog.find()
-    .populate('vehicle_id', 'name')
+    const seatCatalogs = await SeatCatalog.find().populate('vehicle_id', 'name')
 
     res.status(200).json({ message: 'Lấy danh sách danh mục ghế thành công!', seatCatalogs })
   } catch (error) {
@@ -21,8 +20,7 @@ export const getSeatCatalogById = async (req: Request, res: Response): Promise<v
       res.status(400).json({ message: 'ID không hợp lệ!' })
       return
     }
-    const seatCatalog = await SeatCatalog.findById(req.params.id)
-    .populate('vehicle_id', 'name')
+    const seatCatalog = await SeatCatalog.findById(req.params.id).populate('vehicle_id', 'name')
 
     if (!seatCatalog) {
       res.status(404).json({ message: 'Không tìm thấy danh mục ghế!' })
@@ -37,6 +35,12 @@ export const getSeatCatalogById = async (req: Request, res: Response): Promise<v
 //Post
 export const createSeatCatalog = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { name } = req.body
+    const existingSeatCatalog = await SeatCatalog.findOne({ name })
+    if (existingSeatCatalog) {
+      res.status(400).json({ message: 'Danh mục ghế đã tồn tại!' })
+      return
+    }
     const newSeatCatalog = await SeatCatalog.create(req.body)
     const savedSeatCatalog = await newSeatCatalog.save()
     res.status(201).json({ message: 'Tạo danh mục ghế thành công!', savedSeatCatalog })
