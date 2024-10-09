@@ -12,7 +12,7 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
     const tickets = await Ticket.find()
       .populate({
         path: 'seat_id',
-        select: 'name price status',
+        select: '-createAt -updateAt -__v',
         populate: {
           path: 'seat_catalog_id',
           select: 'name',
@@ -54,7 +54,7 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
     const ticket = await Ticket.findById(req.params.id)
       .populate({
         path: 'seat_id',
-        select: 'name price status',
+        select: '-createAt -updateAt -__v',
         populate: {
           path: 'seat_catalog_id',
           select: 'name',
