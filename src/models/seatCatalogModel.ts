@@ -9,7 +9,7 @@ export interface ISeatCatalog extends Document {
 }
 const SeatCatalogSchema = new Schema({
   vehicle_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Vehicle', required: true },
-  name: { type: String, required: true },
+  name: { type: String, unique: true, required: true },
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
 })

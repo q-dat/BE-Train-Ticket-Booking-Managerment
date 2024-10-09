@@ -33,6 +33,12 @@ export const getAgeById = async (req: Request, res: Response): Promise<void> => 
 // Post
 export const createAge = async (req: Request, res: Response): Promise<void> => {
   try {
+    const { name } = req.body
+    const existingAge = await Age.findOne({ name })
+    if (existingAge) {
+      res.status(400).json({ message: 'Lứa tuổi đã tồn tại!' })
+      return
+    }
     const newAge = await Age.create(req.body)
     const savedAge = await newAge.save()
     res.status(201).json({ message: 'Tạo lứa tuổi thành công!', savedAge })
