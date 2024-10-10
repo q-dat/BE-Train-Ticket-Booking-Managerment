@@ -52,32 +52,28 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
       return
     }
     const ticket = await Ticket.findById(req.params.id)
-    .populate({
-      path: 'seat_id',
-      select: '-createAt -updateAt -__v',
-      populate: {
-        path: 'seat_catalog_id',
+      .populate({
+        path: 'seat_id',
         select: '-createAt -updateAt -__v',
         populate: {
-          path: 'vehicle_id',
+          path: 'seat_catalog_id',
           select: '-createAt -updateAt -__v',
+          populate: {
+            path: 'vehicle_id',
+            select: '-createAt -updateAt -__v'
+          }
         }
-      }
-    })
+      })
 
-    .populate('ticket_catalog_id', 'name')
-    .populate({
-      path: 'trip_id',
-      select: '-createAt -updateAt -__v',
-      populate: [
-        { path: 'departure_point',
+      .populate('ticket_catalog_id', 'name')
+      .populate({
+        path: 'trip_id',
         select: '-createAt -updateAt -__v',
-      },
-        { path: 'destination_point',
-        select: '-createAt -updateAt -__v',
-      }
-      ]
-    })
+        populate: [
+          { path: 'departure_point', select: '-createAt -updateAt -__v' },
+          { path: 'destination_point', select: '-createAt -updateAt -__v' }
+        ]
+      })
     if (!ticket) {
       res.status(404).json({ message: 'Vé không tồn tại!' })
       return
@@ -242,32 +238,28 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       }
     }
     const tickets = await Ticket.find(query)
-    .populate({
-      path: 'seat_id',
-      select: '-createAt -updateAt -__v',
-      populate: {
-        path: 'seat_catalog_id',
+      .populate({
+        path: 'seat_id',
         select: '-createAt -updateAt -__v',
         populate: {
-          path: 'vehicle_id',
+          path: 'seat_catalog_id',
           select: '-createAt -updateAt -__v',
+          populate: {
+            path: 'vehicle_id',
+            select: '-createAt -updateAt -__v'
+          }
         }
-      }
-    })
+      })
 
-    .populate('ticket_catalog_id', 'name')
-    .populate({
-      path: 'trip_id',
-      select: '-createAt -updateAt -__v',
-      populate: [
-        { path: 'departure_point',
+      .populate('ticket_catalog_id', 'name')
+      .populate({
+        path: 'trip_id',
         select: '-createAt -updateAt -__v',
-      },
-        { path: 'destination_point',
-        select: '-createAt -updateAt -__v',
-      }
-      ]
-    })
+        populate: [
+          { path: 'departure_point', select: '-createAt -updateAt -__v' },
+          { path: 'destination_point', select: '-createAt -updateAt -__v' }
+        ]
+      })
     if (tickets.length === 0) {
       res.status(404).json({ message: 'Không tìm thấy vé nào phù hợp!' })
       return

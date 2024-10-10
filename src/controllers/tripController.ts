@@ -80,7 +80,7 @@ export const updateTrip = async (req: Request, res: Response) => {
     const updatedTrip = await Trip.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!updatedTrip) {
       res.status(404).json({ message: 'Chuyến đi không tồn tại!' })
-      return 
+      return
     }
     res.status(200).json({ messega: 'Cập nhật chuyến đi thành công!', updatedTrip })
   } catch (error) {

@@ -5,8 +5,7 @@ import Seat from '~/models/seatModel'
 // Get All
 export const getSeats = async (req: Request, res: Response): Promise<void> => {
   try {
-    const seats = await Seat.find()
-    .populate('seat_catalog_id', 'name')
+    const seats = await Seat.find().populate('seat_catalog_id', 'name')
     res.status(200).json({ message: 'Lấy danh sách ghế thành công!', seats })
   } catch (error) {
     console.error('Lỗi khi lấy danh sách ghế', error)
@@ -20,8 +19,7 @@ export const getSeatById = async (req: Request, res: Response): Promise<void> =>
       res.status(400).json({ message: 'ID không hợp lệ!' })
       return
     }
-    const seat = await Seat.findById(req.params.id)
-    .populate('seat_catalog_id', 'name')
+    const seat = await Seat.findById(req.params.id).populate('seat_catalog_id', 'name')
     if (!seat) {
       res.status(404).json({ message: 'Ghế không tồn tại!' })
       return

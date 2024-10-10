@@ -33,10 +33,10 @@ export const getLocationById = async (req: Request, res: Response): Promise<void
 // Post
 export const createLocation = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { name } = req.body;
-    const existingLocation = await Location.findOne({ name });
+    const { name } = req.body
+    const existingLocation = await Location.findOne({ name })
     if (existingLocation) {
-      res.status(400).json({ message: 'Tên địa điểm đã tồn tại!' });
+      res.status(400).json({ message: 'Tên địa điểm đã tồn tại!' })
       return
     }
     const newLocation = await Location.create(req.body)
