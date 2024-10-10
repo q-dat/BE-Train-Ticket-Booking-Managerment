@@ -9,7 +9,7 @@ import path from 'path'
 import { endpointsByCategory } from './views/endpointsByCategory'
 import locationRoutes from './routes/locationRoutes'
 import tripRoutes from './routes/tripRoutes'
-import chairRoutes from './routes/seatRoutes'
+import seatRoutes from './routes/seatRoutes'
 import ticketCatalogRoutes from './routes/ticketCatalogRoutes'
 import ageRoutes from './routes/ageRoutes'
 import postRoutes from './routes/postRoutes'
@@ -50,13 +50,13 @@ app.use(express.json())
 
 app.use('/api/auth', userRoutes)
 app.use('/api/', tripRoutes)
-app.use('/api/', chairRoutes)
 app.use('/api/', ticketCatalogRoutes)
 app.use('/api/', ageRoutes)
 app.use('/api/', locationRoutes)
 app.use('/api/', postRoutes)
 app.use('/api/', postCatalogRoutes)
 app.use('/api/', uploadRoutes)
+app.use('/api/', seatRoutes)
 app.use('/api/', seatCatalogRoutes)
 app.use('/api/', vehicleRoutes)
 app.use('/api/', ticketRoutes)

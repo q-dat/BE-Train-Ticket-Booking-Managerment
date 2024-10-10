@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import mongoose from 'mongoose'
+import SeatCatalog from '~/models/seatCatalogModel'
 import Seat from '~/models/seatModel'
 
 // Get All
@@ -66,6 +67,30 @@ export const deleteSeat = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json({ message: 'Xoá ghế thành công!', deletedSeat })
   } catch (error) {
     console.error('Lỗi khi xoá ghế', error)
+    res.status(500).json({ message: 'Lỗi máy chủ!' })
+  }
+}
+// Get By Category
+export const getSeatsByCategory = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { categoryId } = req.params
+    if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+      res.status(400).json({ message: 'ID danh mục không hợp lệ!' })
+      return
+    }
+    const categoryExists = await SeatCatalog.findById(categoryId)
+    if (!categoryExists) {
+      res.status(404).json({ message: 'Danh mục không tồn tại!' })
+      return
+    }
+    const seats = await Seat.find({ seat_catalog_id: categoryId }).populate('seat_catalog_id', 'name')
+    if (seats.length === 0) {
+      res.status(404).json({ message: 'Không tìm thấy ghế nào trong danh mục này!' })
+      return
+    }
+    res.status(200).json({ message: 'Lấy danh sách ghế theo danh mục thành công!', seats })
+  } catch (error) {
+    console.error('Lỗi khi lấy danh sách ghế theo danh mục', error)
     res.status(500).json({ message: 'Lỗi máy chủ!' })
   }
 }

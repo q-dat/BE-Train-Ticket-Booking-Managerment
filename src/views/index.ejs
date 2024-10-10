@@ -90,8 +90,11 @@
               <span class="endpoint-description">
                 <%= endpoint.description %>
               </span>
-              <% if (endpoint.method.toLowerCase()==='get' && !endpoint.url.includes('/:id') &&
-                !endpoint.url.includes('/search')) { %>
+              <% if (endpoint.method.toLowerCase()==='get'
+               && !endpoint.url.includes('/:id')
+               && !endpoint.url.includes('/:categoryId')
+               && !endpoint.url.includes('/search')) 
+              { %>
                 <button class="fetch-data mt-2 text-indigo-600 hover:underline" data-url="<%= endpoint.url %>">Xem dữ
                   liệu</button>
                 <% } %>
