@@ -15,10 +15,10 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
         select: '-createAt -updateAt -__v',
         populate: {
           path: 'seat_catalog_id',
-          select: 'name',
+          select: '-createAt -updateAt -__v',
           populate: {
             path: 'vehicle_id',
-            select: 'name status'
+            select: '-createAt -updateAt -__v'
           }
         }
       })
@@ -28,8 +28,8 @@ export const getAllTickets = async (req: Request, res: Response): Promise<void> 
         path: 'trip_id',
         select: '-createAt -updateAt -__v',
         populate: [
-          { path: 'departure_point', select: 'name' },
-          { path: 'destination_point', select: 'name' }
+          { path: 'departure_point', select: '-createAt -updateAt -__v' },
+          { path: 'destination_point', select: '-createAt -updateAt -__v' }
         ]
       })
     tickets.forEach((ticket: any) => {
@@ -52,28 +52,32 @@ export const getTicketById = async (req: Request, res: Response): Promise<void> 
       return
     }
     const ticket = await Ticket.findById(req.params.id)
-      .populate({
-        path: 'seat_id',
+    .populate({
+      path: 'seat_id',
+      select: '-createAt -updateAt -__v',
+      populate: {
+        path: 'seat_catalog_id',
         select: '-createAt -updateAt -__v',
         populate: {
-          path: 'seat_catalog_id',
-          select: 'name',
-          populate: {
-            path: 'vehicle_id',
-            select: 'name status'
-          }
+          path: 'vehicle_id',
+          select: '-createAt -updateAt -__v',
         }
-      })
+      }
+    })
 
-      .populate('ticket_catalog_id', 'name')
-      .populate({
-        path: 'trip_id',
+    .populate('ticket_catalog_id', 'name')
+    .populate({
+      path: 'trip_id',
+      select: '-createAt -updateAt -__v',
+      populate: [
+        { path: 'departure_point',
         select: '-createAt -updateAt -__v',
-        populate: [
-          { path: 'departure_point', select: 'name' },
-          { path: 'destination_point', select: 'name' }
-        ]
-      })
+      },
+        { path: 'destination_point',
+        select: '-createAt -updateAt -__v',
+      }
+      ]
+    })
     if (!ticket) {
       res.status(404).json({ message: 'Vé không tồn tại!' })
       return
@@ -174,7 +178,7 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       query.ticket_catalog_id = ticketCatalog._id
       isValidSearch = true
     }
-    
+
     if (departure_point_name) {
       const departurePoint = await Location.findOne({
         name: { $regex: departure_point_name, $options: 'i' }
@@ -238,31 +242,35 @@ export const searchTickets = async (req: Request, res: Response): Promise<void> 
       }
     }
     const tickets = await Ticket.find(query)
-      .populate({
-        path: 'seat_id',
-        select: 'name price status',
-        populate: {
-          path: 'seat_catalog_id',
-          select: 'name',
-          populate: {
-            path: 'vehicle_id',
-            select: 'name status'
-          }
-        }
-      })
-
-      .populate('ticket_catalog_id', 'name')
-      .populate({
-        path: 'trip_id',
+    .populate({
+      path: 'seat_id',
+      select: '-createAt -updateAt -__v',
+      populate: {
+        path: 'seat_catalog_id',
         select: '-createAt -updateAt -__v',
-        populate: [
-          { path: 'departure_point', select: 'name' },
-          { path: 'destination_point', select: 'name' }
-        ]
-      })
-      if (tickets.length === 0) {
-        res.status(404).json({ message: 'Không tìm thấy vé nào phù hợp!' })
-        return
+        populate: {
+          path: 'vehicle_id',
+          select: '-createAt -updateAt -__v',
+        }
+      }
+    })
+
+    .populate('ticket_catalog_id', 'name')
+    .populate({
+      path: 'trip_id',
+      select: '-createAt -updateAt -__v',
+      populate: [
+        { path: 'departure_point',
+        select: '-createAt -updateAt -__v',
+      },
+        { path: 'destination_point',
+        select: '-createAt -updateAt -__v',
+      }
+      ]
+    })
+    if (tickets.length === 0) {
+      res.status(404).json({ message: 'Không tìm thấy vé nào phù hợp!' })
+      return
     }
     tickets.forEach((ticket: any) => {
       const seatPrice = ticket.seat_id?.price || 0
